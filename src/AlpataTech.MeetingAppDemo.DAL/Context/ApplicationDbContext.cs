@@ -18,21 +18,10 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasData(
-                new User()
-                {
-                    Id = 1,
-                    FirstName = "Test User 1 FN",
-                    LastName = "Test User 1 LN"
-                },
-                new User()
-                {
-                    Id = 2,
-                    FirstName = "Test User 2 FN",
-                    LastName = "Test User 2 LN"
-                }
-                );
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<MeetingParticipant> MeetingParticipants { get; set; }
+        public DbSet<MeetingDocument> MeetingDocuments { get; set; }
     }
 }
