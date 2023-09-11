@@ -11,4 +11,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AlpataTech.MeetingAppDemo.DAL\AlpataTech.MeetingAppDemo.DAL.csproj" />
+    <ProjectReference Include="..\AlpataTech.MeetingAppDemo.Services\AlpataTech.MeetingAppDemo.Services.csproj" />
+  </ItemGroup>
+
 </Project>

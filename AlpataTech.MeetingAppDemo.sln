@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.API", "src\AlpataTech.MeetingAppDemo.API\AlpataTech.MeetingAppDemo.API.csproj", "{56545027-9B97-49A0-BDE4-56E4D3D46AA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.API", "src\AlpataTech.MeetingAppDemo.API\AlpataTech.MeetingAppDemo.API.csproj", "{56545027-9B97-49A0-BDE4-56E4D3D46AA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.Entities", "src\AlpataTech.MeetingAppDemo.Entities\AlpataTech.MeetingAppDemo.Entities.csproj", "{09BBD23D-BB8C-4B89-B9D1-542A13C20A92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.Entities", "src\AlpataTech.MeetingAppDemo.Entities\AlpataTech.MeetingAppDemo.Entities.csproj", "{09BBD23D-BB8C-4B89-B9D1-542A13C20A92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.Services", "src\AlpataTech.MeetingAppDemo.Services\AlpataTech.MeetingAppDemo.Services.csproj", "{62CA21DE-830F-4310-91ED-41ADD270E6EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.Services", "src\AlpataTech.MeetingAppDemo.Services\AlpataTech.MeetingAppDemo.Services.csproj", "{62CA21DE-830F-4310-91ED-41ADD270E6EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.DAL", "src\AlpataTech.MeetingAppDemo.DAL\AlpataTech.MeetingAppDemo.DAL.csproj", "{7288EB46-8019-4E8E-B6B9-AF37E10C0806}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.DAL", "src\AlpataTech.MeetingAppDemo.DAL\AlpataTech.MeetingAppDemo.DAL.csproj", "{7288EB46-8019-4E8E-B6B9-AF37E10C0806}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{219440C1-DA20-4BBA-97B7-0CF304E66970}"
 EndProject
