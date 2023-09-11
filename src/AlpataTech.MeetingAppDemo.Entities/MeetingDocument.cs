@@ -7,6 +7,8 @@ namespace AlpataTech.MeetingAppDemo.Entities
     {
         // Navigation property to the associated Meeting
         [Required]
+        public int MeetingId { get; set; }
+        [Required]
         public Meeting Meeting { get; set; }
 
         [Required]

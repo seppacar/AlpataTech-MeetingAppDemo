@@ -19,9 +19,15 @@ namespace AlpataTech.MeetingAppDemo.Entities
 
         // Navigation property to Organizer
         [Required]
+        public int OrganizerId { get; set; }
+        [Required]
         public User Organizer { get; set; }
 
-        // Navigation property to Participants
-        public List<User> Participants { get; set; }
+        // Navigation property to MeetingParticipants
+        public List<MeetingParticipant> Participants { get; set; }
+
+        // Navigation property to MeetingDocuments
+        public List<MeetingDocument> Documents { get; set; }
+
     }
 }
