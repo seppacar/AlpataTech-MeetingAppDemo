@@ -1,4 +1,4 @@
-﻿using AlpataTech.MeetingAppDemo.Services.User;
+﻿using AlpataTech.MeetingAppDemo.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
