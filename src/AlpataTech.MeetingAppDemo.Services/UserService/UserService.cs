@@ -1,6 +1,7 @@
 ﻿using AlpataTech.MeetingAppDemo.DAL.Repository;
+using AlpataTech.MeetingAppDemo.Entities;
 
-namespace AlpataTech.MeetingAppDemo.Services.User
+namespace AlpataTech.MeetingAppDemo.Services.UserService
 {
     public class UserService : IUserService
     {
@@ -10,9 +11,9 @@ namespace AlpataTech.MeetingAppDemo.Services.User
             _userRepository = userRepository;
         }
 
-        public string Get()
+        public virtual IEnumerable<User> GetAll()
         {
-            return("Testing repository ooo");
+            return _userRepository.GetAll();
         }
     }
 }

@@ -9,6 +9,13 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly DbSet<T>  _dbSet;
+
+        public GenericRepository(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+            _dbSet = _dbContext.Set<T>();
+        }
+
         public void Add(T entity)
         {
             _dbSet.Add(entity);
@@ -31,7 +38,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
 
         public IEnumerable<T> GetAll()
         {
-            return _dbSet.ToList();
+            return _dbSet.AsNoTracking().ToList();
         }
 
         public void Remove(Guid id)

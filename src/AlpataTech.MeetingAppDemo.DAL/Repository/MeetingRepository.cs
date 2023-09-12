@@ -4,9 +4,9 @@ using AlpataTech.MeetingAppDemo.Entities;
 
 namespace AlpataTech.MeetingAppDemo.DAL.Repository
 {
-    public class UserRepository : GenericRepository<User>
+    internal class MeetingRepository : GenericRepository<Meeting>
     {
-        public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public MeetingRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
     }

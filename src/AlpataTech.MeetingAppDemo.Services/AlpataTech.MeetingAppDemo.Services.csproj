@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AlpataTech.MeetingAppDemo.DAL\AlpataTech.MeetingAppDemo.DAL.csproj" />
+    <ProjectReference Include="..\AlpataTech.MeetingAppDemo.Entities\AlpataTech.MeetingAppDemo.Entities.csproj" />
   </ItemGroup>
 
 </Project>

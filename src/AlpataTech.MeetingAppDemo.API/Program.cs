@@ -1,7 +1,6 @@
 using AlpataTech.MeetingAppDemo.DAL.Context;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
-using AlpataTech.MeetingAppDemo.DAL.Repository.Common;
-using AlpataTech.MeetingAppDemo.Services.User;
+using AlpataTech.MeetingAppDemo.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +11,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Services
-builder.Services.AddScoped<IUserService, UserService>();
+// Database Context
+builder.Services.AddDbContext<ApplicationDbContext>();
 
 // Repositories
 builder.Services.AddScoped<UserRepository>();
 
-// Database Context
-builder.Services.AddDbContext<ApplicationDbContext>();
+// Services
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
