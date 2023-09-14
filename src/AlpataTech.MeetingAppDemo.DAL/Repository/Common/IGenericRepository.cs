@@ -26,7 +26,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
         void Update(T entity);
 
         // Remove an entity from the repository by its unique identifier.
-        void Remove(Guid id);
+        void Remove(int id);
 
         // Remove an entity from the repository.
         void Remove(T entity);

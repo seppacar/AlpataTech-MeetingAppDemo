@@ -1,6 +1,8 @@
 using AlpataTech.MeetingAppDemo.DAL.Context;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
+using AlpataTech.MeetingAppDemo.Services.Mapper;
 using AlpataTech.MeetingAppDemo.Services.UserService;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,9 @@ builder.Services.AddScoped<UserRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
+
+// Automapper Profiles
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 var app = builder.Build();
 

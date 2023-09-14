@@ -1,4 +1,5 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities;
+using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,6 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
     [Route("api/users")]
     public class UserController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
         private readonly IUserService _userService;
         private readonly ILogger<UserController> _logger;
@@ -22,24 +19,71 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("test", Name = "Test Get")]
-        public IActionResult TestGet() { 
+        /* Admin Authorized Routes */
+
+        [HttpGet]
+        public IActionResult GetAllUsers()
+        {
             var users = _userService.GetAll();
             return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetUserById(int id)
+        {
+            var user = _userService.GetById(id);
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public IActionResult CreateUser([FromBody] CreateUserDto createUserDto)
+        {   
+            _userService.CreateUser(createUserDto);
+            return Ok("Created");
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
+        {
+            _userService.UpdateUser(updateUserDto);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
             _userService.DeleteUser(id);
-            return NoContent();
+            return Ok();
         }
 
-        [HttpPost]
-        public IActionResult CreateUser([FromBody] User user)
+        /* Public Routes  */
+
+        [HttpPost("register")]
+        public IActionResult RegisterUser([FromBody] CreateUserDto createUserDto)
         {
-            var createdUser = _userService.CreateUser(user);
-            return Ok(createdUser);
+            _userService.RegisterUser(createUserDto);
+            return Ok();
+        }
+
+        /* User Routes (me) */
+
+        [HttpGet("me")]
+        public IActionResult GetCurrentUser()
+        {
+            return Ok();
+        }
+
+        [HttpPut("me")]
+        public IActionResult UpdateCurrentUser()
+        {
+            return Ok();
+        }
+
+        [HttpPost("me/change-password")]
+        public IActionResult ChangePassword()
+        {
+            // Implementation for changing the user's password goes here
+            return Ok(); // Placeholder response
         }
     }
 }

@@ -14,7 +14,7 @@ namespace AlpataTech.MeetingAppDemo.Entities
         [Required]
         public string Email { get; set; }
 
-        public String PhoneNumber { get; set; }
+        public String? PhoneNumber { get; set; }
 
         [Required]
         public String Password { get; set; } // TODO: Store password hashed, hash and salt perhaps?

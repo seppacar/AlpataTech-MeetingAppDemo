@@ -41,7 +41,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
             return _dbSet.AsNoTracking().ToList();
         }
 
-        public void Remove(Guid id)
+        public void Remove(int id)
         {
             T entity = _dbSet.Find(id);
             if (entity != null)
@@ -59,6 +59,11 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
         {
             _dbSet.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }
