@@ -1,4 +1,5 @@
-﻿using AlpataTech.MeetingAppDemo.Services.UserService;
+﻿using AlpataTech.MeetingAppDemo.Entities;
+using AlpataTech.MeetingAppDemo.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
@@ -22,8 +23,23 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpGet("test", Name = "Test Get")]
-        public String TestGet() { 
-            return "what";
+        public IActionResult TestGet() { 
+            var users = _userService.GetAll();
+            return Ok(users);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            _userService.DeleteUser(id);
+            return NoContent();
+        }
+
+        [HttpPost]
+        public IActionResult CreateUser([FromBody] User user)
+        {
+            var createdUser = _userService.CreateUser(user);
+            return Ok(createdUser);
         }
     }
 }

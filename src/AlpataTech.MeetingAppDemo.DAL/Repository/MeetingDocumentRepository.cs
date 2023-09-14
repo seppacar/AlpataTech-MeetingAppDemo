@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlpataTech.MeetingAppDemo.DAL
+namespace AlpataTech.MeetingAppDemo.DAL.Repository
 {
-    internal class MeetingDocumentRepository
+    public class MeetingDocumentRepository
     {
     }
 }
