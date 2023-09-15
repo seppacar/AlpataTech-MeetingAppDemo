@@ -32,7 +32,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                         LastName = "User1 LN",
                         Email = "user1@test.com",
                         PhoneNumber = "1234567890",
-                        Password = "1234567890",
+                        PasswordHash = "1234567890",
                         ProfileImage = "test.png"
                     },
                     new User()
@@ -42,7 +42,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                         LastName = "User2 LN",
                         Email = "user2@test.com",
                         PhoneNumber = "1234567890",
-                        Password = "1234567890",
+                        PasswordHash = "1234567890",
                         ProfileImage = "test.png"
                     },
                     new User()
@@ -52,7 +52,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                         LastName = "User3 LN",
                         Email = "user3@test.com",
                         PhoneNumber = "1234567890",
-                        Password = "1234567890",
+                        PasswordHash = "1234567890",
                         ProfileImage = "test.png"
                     },
                     new User()
@@ -62,7 +62,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                         LastName = "User4 LN",
                         Email = "user3@test.com",
                         PhoneNumber = "1234567890",
-                        Password = "1234567890",
+                        PasswordHash = "1234567890",
                         ProfileImage = "test.png"
                     }
                 }
