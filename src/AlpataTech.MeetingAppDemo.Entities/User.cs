@@ -17,7 +17,7 @@ namespace AlpataTech.MeetingAppDemo.Entities
         public String? PhoneNumber { get; set; }
 
         [Required]
-        public String Password { get; set; } // TODO: Store password hashed, hash and salt perhaps?
+        public String PasswordHash { get; set; } // TODO: Store password hashed, hash and salt perhaps?
 
         [Required]
         public String ProfileImage { get; set; } // Path of the profile image

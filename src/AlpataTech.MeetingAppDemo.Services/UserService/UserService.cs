@@ -20,6 +20,10 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
         {
             // TODO: Welcome email here
             var user = _mapper.Map<User>(createUserDto);
+            // Hash password
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password);
+            user.PasswordHash = passwordHash;
+            // Add user
             _userRepository.Add(user);
             _userRepository.SaveChanges();
             return _mapper.Map<UserDto>(user);
