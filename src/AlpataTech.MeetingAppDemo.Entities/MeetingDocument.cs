@@ -1,5 +1,4 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities.Common;
-using System.ComponentModel.DataAnnotations;
 
 namespace AlpataTech.MeetingAppDemo.Entities
 {

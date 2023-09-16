@@ -1,5 +1,6 @@
 using AlpataTech.MeetingAppDemo.DAL.Context;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
+using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Services.Mapper;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
@@ -27,6 +28,9 @@ builder.Services.AddScoped<IMeetingService, MeetingService>();
 
 // Automapper Profiles
 builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(MeetingProfile));
+builder.Services.AddAutoMapper(typeof(MeetingParticipantProfile));
+builder.Services.AddAutoMapper(typeof(MeetingDocumentProfile));
 
 var app = builder.Build();
 

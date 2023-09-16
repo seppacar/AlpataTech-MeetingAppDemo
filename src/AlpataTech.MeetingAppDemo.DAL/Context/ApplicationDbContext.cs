@@ -20,6 +20,14 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            // AutoInclude navigation properties
+            modelBuilder.Entity<Meeting>()
+                .Navigation(m => m.Documents)
+                .AutoInclude();
+            modelBuilder.Entity<Meeting>()
+                .Navigation(m => m.Participants)
+                .AutoInclude();
+
             // Seed data for Users
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", PasswordHash = "password123", ProfileImage = "/images/johndoe.jpg" },
