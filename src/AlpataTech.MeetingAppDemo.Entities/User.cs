@@ -15,10 +15,11 @@ namespace AlpataTech.MeetingAppDemo.Entities
         public string Email { get; set; } = String.Empty;
 
         public String? PhoneNumber { get; set; }
-        
+
         [Required]
         public String PasswordHash { get; set; } = String.Empty;
 
         [Required]
         public String ProfileImage { get; set; } = String.Empty;
+    }
 }
