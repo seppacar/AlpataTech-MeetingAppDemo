@@ -1,4 +1,4 @@
-﻿namespace AlpataTech.MeetingAppDemo.Services.MeetingDocument
+﻿namespace AlpataTech.MeetingAppDemo.Services.MeetingDocumentService
 {
     public class MeetingDocumentService
     {
