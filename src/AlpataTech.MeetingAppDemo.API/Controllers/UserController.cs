@@ -1,5 +1,4 @@
-﻿using AlpataTech.MeetingAppDemo.Entities;
-using AlpataTech.MeetingAppDemo.Entities.DTO.User;
+﻿using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,4 @@
-﻿using AlpataTech.MeetingAppDemo.Entities;
-using AlpataTech.MeetingAppDemo.Entities.DTO.User;
+﻿using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 
 namespace AlpataTech.MeetingAppDemo.Services.UserService
 {
