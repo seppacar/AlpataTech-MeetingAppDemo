@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AlpataTech.MeetingAppDemo.Entities
 {
-    public class Meeting : BaseEntitiy
+    public class Meeting : BaseEntity
     {
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }

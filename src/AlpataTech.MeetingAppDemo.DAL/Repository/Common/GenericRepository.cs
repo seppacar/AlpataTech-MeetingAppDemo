@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
 {
-    public abstract class GenericRepository<T> : IGenericRepository<T> where T : BaseEntitiy
+    public abstract class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly DbSet<T>  _dbSet;

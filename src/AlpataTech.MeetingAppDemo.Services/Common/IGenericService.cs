@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace AlpataTech.MeetingAppDemo.Services.Common
 {
-    public interface IGenericService<T> where T : BaseEntitiy
+    public interface IGenericService<T> where T : BaseEntity
     {
         // Retrieve an entity by its unique identifier.
         T GetById(int id);

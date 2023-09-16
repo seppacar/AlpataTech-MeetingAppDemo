@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AlpataTech.MeetingAppDemo.Entities
 {
-    public class User : BaseEntitiy
+    public class User : BaseEntity
     {
         [Required]
         public String FirstName { get; set; } = String.Empty;

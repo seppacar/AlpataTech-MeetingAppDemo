@@ -5,7 +5,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
 {
     // The generic repository interface.
     // It's parameterized by a type T, which should be a subtype of BaseEntitiy.
-    public interface IGenericRepository<T> where T : BaseEntitiy
+    public interface IGenericRepository<T> where T : BaseEntity
     {
         // Retrieve an entity by its unique identifier.
         T GetById(int id);

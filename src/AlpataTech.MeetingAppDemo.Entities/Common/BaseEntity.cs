@@ -2,7 +2,7 @@
 
 namespace AlpataTech.MeetingAppDemo.Entities.Common
 {
-    public class BaseEntitiy
+    public class BaseEntity
     {
         [Required]
         [Key]

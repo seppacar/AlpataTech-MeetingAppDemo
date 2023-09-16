@@ -2,7 +2,7 @@
 
 namespace AlpataTech.MeetingAppDemo.Entities
 {
-    public class MeetingParticipant : BaseEntitiy
+    public class MeetingParticipant : BaseEntity
     {
         public int MeetingId { get; set; }
         public Meeting Meeting { get; set; }

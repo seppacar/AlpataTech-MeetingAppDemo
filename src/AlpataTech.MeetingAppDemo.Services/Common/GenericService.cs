@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace AlpataTech.MeetingAppDemo.Services.Common
 {
-    public abstract class GenericService<T> : IGenericService<T> where T : BaseEntitiy
+    public abstract class GenericService<T> : IGenericService<T> where T : BaseEntity
     {
         public void Add(T entity)
         {
