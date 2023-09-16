@@ -44,6 +44,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
             // Seed data for MeetingParticipants
             modelBuilder.Entity<MeetingParticipant>().HasData(
                 new MeetingParticipant { Id = 1, MeetingId = 1, UserId = 2 }, // Jane Smith is participating in Team Meeting
+                new MeetingParticipant { Id = 2, MeetingId = 1, AttendeeFirstName = "Alex", AttendeeLastName = "Johnson", AttendeeEmail = "alex.johnson@example.com" }, // Alex Johnson is participating in Team Meeting as a non-user
                 new MeetingParticipant { Id = 3, MeetingId = 2, UserId = 3 } // Michael Johnson is participating in Board Meeting
             );
         }

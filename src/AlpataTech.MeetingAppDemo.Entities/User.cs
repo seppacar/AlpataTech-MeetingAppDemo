@@ -5,16 +5,20 @@ namespace AlpataTech.MeetingAppDemo.Entities
 {
     public class User : BaseEntitiy
     {
-        public String FirstName { get; set; }
+        [Required]
+        public String FirstName { get; set; } = String.Empty;
 
-        public String LastName { get; set; }
+        [Required]
+        public String LastName { get; set; } = String.Empty;
 
-        public string Email { get; set; }
+        [Required]
+        public string Email { get; set; } = String.Empty;
 
         public String? PhoneNumber { get; set; }
+        
+        [Required]
+        public String PasswordHash { get; set; } = String.Empty;
 
-        public String PasswordHash { get; set; } // TODO: Store password hashed, hash and salt perhaps?
-
-        public String ProfileImage { get; set; } // Path of the profile image
-    }
+        [Required]
+        public String ProfileImage { get; set; } = String.Empty;
 }

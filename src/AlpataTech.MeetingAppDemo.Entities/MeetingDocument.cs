@@ -7,7 +7,7 @@ namespace AlpataTech.MeetingAppDemo.Entities
     {
         public int MeetingId { get; set; }
         public Meeting Meeting { get; set; }
-        public String DocumentTitle { get; set; }
-        public String DocumentPath { get; set; }
+        public string DocumentTitle { get; set; }
+        public string DocumentPath { get; set; }
     }
 }
