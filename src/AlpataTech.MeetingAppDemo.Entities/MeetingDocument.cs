@@ -5,16 +5,9 @@ namespace AlpataTech.MeetingAppDemo.Entities
 {
     public class MeetingDocument : BaseEntitiy
     {
-        // Navigation property to the associated Meeting
-        [Required]
         public int MeetingId { get; set; }
         public Meeting Meeting { get; set; }
-
-        [Required]
         public String DocumentTitle { get; set; }
-
-
-        [Required]
         public String DocumentPath { get; set; }
     }
 }

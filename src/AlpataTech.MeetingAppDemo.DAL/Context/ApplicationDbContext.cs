@@ -20,8 +20,6 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            // TODO: Fix Cascade Delete For MeetingParticipant, Principal User
-
             // Seed data for Users
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", PasswordHash = "password123", ProfileImage = "/images/johndoe.jpg" },
