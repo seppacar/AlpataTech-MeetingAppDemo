@@ -6,6 +6,7 @@ namespace AlpataTech.MeetingAppDemo.Entities
     public class MeetingParticipant : BaseEntitiy
     {
         // Navigation property to the associated Meeting
+        [Required]
         public int MeetingId { get; set; }
         public Meeting Meeting { get; set; }
 
@@ -14,8 +15,8 @@ namespace AlpataTech.MeetingAppDemo.Entities
         public User User { get; set; }
 
         // Attendee details (if they are not users)
-        public string AttendeeFirstName { get; set; }
-        public string AttendeeLastName { get; set; }
-        public string AttendeeEmail { get; set; }
+        public string? AttendeeFirstName { get; set; }
+        public string? AttendeeLastName { get; set; }
+        public string? AttendeeEmail { get; set; }
     }
 }
