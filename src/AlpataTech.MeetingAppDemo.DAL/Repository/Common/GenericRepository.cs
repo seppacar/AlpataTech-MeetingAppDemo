@@ -7,8 +7,8 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
 {
     public abstract class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly DbSet<T>  _dbSet;
+        protected readonly ApplicationDbContext _dbContext;
+        protected readonly DbSet<T> _dbSet;
 
         public GenericRepository(ApplicationDbContext dbContext)
         {
@@ -16,38 +16,36 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
             _dbSet = _dbContext.Set<T>();
         }
 
-        public void Add(T entity)
+        public async Task<T> AddAsync(T entity)
         {
-            _dbSet.Add(entity);
+            await _dbSet.AddAsync(entity);
+            return entity;
         }
 
-        public void AddRange(IEnumerable<T> entities)
+        public async Task AddRangeAsync(IEnumerable<T> entities)
         {
-            _dbSet.AddRange(entities);
+            await _dbSet.AddRangeAsync(entities);
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _dbSet.Where(predicate).ToList();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
+
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return _dbSet.AsNoTracking().ToList();
+            return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
         }
 
-        public void Remove(int id)
+        public void Update(T entity)
         {
-            T entity = _dbSet.Find(id);
-            if (entity != null)
-            {
-                _dbSet.Remove(entity);
-            }
+            _dbSet.Update(entity);
         }
 
         public void Remove(T entity)
@@ -55,10 +53,9 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
             _dbSet.Remove(entity);
         }
 
-        public void Update(T entity)
+        public async Task SaveChangesAsync()
         {
-            _dbSet.Attach(entity);
-            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
 
         public void SaveChanges()

@@ -4,7 +4,7 @@ using AlpataTech.MeetingAppDemo.Entities;
 
 namespace AlpataTech.MeetingAppDemo.DAL.Repository
 {
-    public class UserRepository : GenericRepositoryNew<User>
+    public class UserRepository : GenericRepository<User>
     {
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
