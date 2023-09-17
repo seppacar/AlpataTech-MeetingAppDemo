@@ -7,13 +7,13 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
 {
     public abstract class GenericRepositoryNew<T> : IGenericRepositoryNew<T> where T : BaseEntity
     {
-        protected readonly ApplicationDbContext _context;
+        protected readonly ApplicationDbContext _dbContext;
         protected readonly DbSet<T> _dbSet;
 
-        public GenericRepositoryNew(ApplicationDbContext context, DbSet<T> dbSet)
+        public GenericRepositoryNew(ApplicationDbContext dbContext)
         {
-            _context = context;
-            _dbSet = dbSet;
+            _dbContext = dbContext;
+            _dbSet = _dbContext.Set<T>();
         }
 
         public async Task<T> AddAsync(T entity)
@@ -55,12 +55,12 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository.Common
 
         public async Task SaveChangesAsync()
         {
-            await _context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         public void SaveChanges()
         {
-            _context.SaveChanges();
+            _dbContext.SaveChanges();
         }
     }
 }

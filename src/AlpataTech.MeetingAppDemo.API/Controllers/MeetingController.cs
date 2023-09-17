@@ -1,4 +1,5 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
+using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,38 +20,42 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         /* Admin Authorized Routes */
 
         [HttpGet]
-        public IActionResult GetAllMeetings()
+        public async Task<IActionResult> GetAllMeetings()
         {
-            var meetings = _meetingService.GetAll();
+            var meetings = await _meetingService.GetAllMeetingsAsync();
             return Ok(meetings);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetMeetingById(int id)
+        public async Task<IActionResult> GetMeetingById(int id)
         {
-            var meeting = _meetingService.GetById(id);
+            var meeting = await _meetingService.GetMeetingByIdAsync(id);
+            if (meeting == null) 
+            {
+                return NotFound();
+            }
             return Ok(meeting);
         }
 
         [HttpPost]
-        public IActionResult CreateMeeting([FromBody] CreateMeetingDto createMeetingDto)
+        public async Task<IActionResult> CreateMeeting([FromBody] CreateMeetingDto createMeetingDto)
         {
-            _meetingService.CreateMeeting(createMeetingDto);
-            return Ok();
+            var meetingDto = await _meetingService.CreateMeetingAsync(createMeetingDto);
+            return CreatedAtAction(nameof(GetMeetingById), new { id = meetingDto.Id }, meetingDto);
         }
 
         [HttpPost("{id}")]
-        public IActionResult UpdateMeeting([FromBody] UpdateMeetingDto updateMeetingDto)
+        public async Task<IActionResult> UpdateMeeting(int id, [FromBody] UpdateMeetingDto updateMeetingDto)
         {
-            _meetingService.UpdateMeeting(updateMeetingDto);
+            var meeting = await _meetingService.UpdateMeetingAsync(id, updateMeetingDto);
             return Ok();
         }
 
         [HttpDelete]
-        public IActionResult DeleteMeeting(int id)
+        public async Task<IActionResult> DeleteMeeting(int id)
         {
-            _meetingService.DeleteMeeting(id);
-            return Ok();
+            await _meetingService.DeleteMeetingAsync(id);
+            return NoContent();
         }
     }
 }

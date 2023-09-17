@@ -18,71 +18,50 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             _logger = logger;
         }
 
-        /* Admin Authorized Routes */
-
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            var users = _userService.GetAll();
+            var users = await _userService.GetAllUsersAsync();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
-            var user = _userService.GetById(id);
+            var user = await _userService.GetUserByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound($"User with id : {id} not found");
+            }
             return Ok(user);
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBody] CreateUserDto createUserDto)
-        {   
-            _userService.CreateUser(createUserDto);
-            return Ok("Created");
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
+        {
+            var userDto = await _userService.CreateUserAsync(createUserDto);
+            return CreatedAtAction(nameof(GetUserById), new { id = userDto.Id }, userDto);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
         {
-            _userService.UpdateUser(updateUserDto);
-            return Ok();
+            var updatedUser = await _userService.UpdateUserAsync(id, updateUserDto);
+            
+            if(updatedUser == null)
+            {
+                return NotFound();
+            }
+            return Ok(updatedUser);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            _userService.DeleteUser(id);
-            return Ok();
+            await _userService.DeleteUserAsync(id);
+            return NoContent();
         }
 
-        /* Public Routes  */
-
-        [HttpPost("register")]
-        public IActionResult RegisterUser([FromBody] CreateUserDto createUserDto)
-        {
-            _userService.RegisterUser(createUserDto);
-            return Ok();
-        }
-
-        /* User Routes (me) */
-
-        [HttpGet("me")]
-        public IActionResult GetCurrentUser()
-        {
-            return Ok();
-        }
-
-        [HttpPut("me")]
-        public IActionResult UpdateCurrentUser()
-        {
-            return Ok();
-        }
-
-        [HttpPost("me/change-password")]
-        public IActionResult ChangePassword()
-        {
-            // Implementation for changing the user's password goes here
-            return Ok(); // Placeholder response
-        }
     }
 }

@@ -2,6 +2,7 @@
 using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AutoMapper;
+using System.Linq.Expressions;
 
 namespace AlpataTech.MeetingAppDemo.Services.UserService
 {
@@ -16,46 +17,54 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             _mapper = mapper;
         }
 
-        public UserDto CreateUser(CreateUserDto createUserDto)
+        public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto)
         {
-            // TODO: Welcome email here
+            // Map createUserDto type to User type
             var user = _mapper.Map<User>(createUserDto);
-            // Hash password
+
+            // Hash the password using BCrypt
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password);
             user.PasswordHash = passwordHash;
-            // Add user
-            _userRepository.Add(user);
-            _userRepository.SaveChanges();
+
+            // TODO: PROFILE IMAGE
+
+            // Add the user asynchronously
+            await _userRepository.AddAsync(user);
+
+            // Save changes to the database
+            await _userRepository.SaveChangesAsync();
+
+            // Map the created user to UserDto and return
             return _mapper.Map<UserDto>(user);
         }
 
-        public void DeleteUser(int id)
+        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            _userRepository.Remove(id);
-            _userRepository.SaveChanges(); // Save changes to the database
-        }
-
-        public IEnumerable<UserDto> GetAll()
-        {
-            var users = _userRepository.GetAll();
+            var users = await _userRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public UserDto GetById(int id)
+        public async Task<UserDto> GetUserByIdAsync(int id)
         {
-            var user = _userRepository.GetById(id);
+            var user = await _userRepository.GetByIdAsync(id);
             return _mapper.Map<UserDto>(user);
         }
 
-        public void RegisterUser(CreateUserDto createUserDto)
+        public async Task<IEnumerable<UserDto>> FindUsersAsync(Expression<Func<User, bool>> predicate)
         {
-            // TODO
-            CreateUser(createUserDto);
+            var users = await _userRepository.FindAsync(predicate);
+            return _mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public UserDto UpdateUser(UpdateUserDto updateUserDto)
+        public Task<UserDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task DeleteUserAsync(int id)
+        {
+            _userRepository.Remove(await _userRepository.GetByIdAsync(id));
+            await _userRepository.SaveChangesAsync();
         }
     }
 }

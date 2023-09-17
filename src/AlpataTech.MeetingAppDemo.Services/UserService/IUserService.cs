@@ -1,23 +1,16 @@
-﻿using AlpataTech.MeetingAppDemo.Entities.DTO.User;
+﻿using AlpataTech.MeetingAppDemo.Entities;
+using AlpataTech.MeetingAppDemo.Entities.DTO.User;
+using System.Linq.Expressions;
 
 namespace AlpataTech.MeetingAppDemo.Services.UserService
 {
     public interface IUserService
     {
-        // CRUD
-        public IEnumerable<UserDto> GetAll();
-
-        public UserDto GetById(int id);
-
-        public UserDto CreateUser(CreateUserDto createUserDto);
-
-        public UserDto UpdateUser(UpdateUserDto updateUserDto);
-
-        public void DeleteUser(int id);
-
-        //
-
-        public void RegisterUser(CreateUserDto createUserDto);
-
+        Task<UserDto> CreateUserAsync(CreateUserDto createUserDto);
+        Task<IEnumerable<UserDto>> GetAllUsersAsync();
+        Task<UserDto> GetUserByIdAsync(int id);
+        Task<IEnumerable<UserDto>> FindUsersAsync(Expression<Func<User, bool>> predicate);
+        Task<UserDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto);
+        Task DeleteUserAsync(int id);
     }
 }

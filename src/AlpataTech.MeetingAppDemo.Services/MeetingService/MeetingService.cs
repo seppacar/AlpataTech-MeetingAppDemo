@@ -2,6 +2,7 @@
 using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
 using AutoMapper;
+using System.Linq.Expressions;
 
 namespace AlpataTech.MeetingAppDemo.Services.MeetingService
 {
@@ -15,38 +16,40 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             _meetingRepository = meetingRepository;
             _mapper = mapper;
         }
-
-        public MeetingDto CreateMeeting(CreateMeetingDto createMeetingDto)
+        public async Task<MeetingDto> CreateMeetingAsync(CreateMeetingDto createMeetingDto)
         {
             var meeting = _mapper.Map<Meeting>(createMeetingDto);
-            _meetingRepository.Add(meeting);
-            _meetingRepository.SaveChanges();
 
-            return _mapper.Map<MeetingDto>(createMeetingDto);
-        }
-
-        public void DeleteMeeting(int id)
-        {
-            var meeting = _meetingRepository.GetById(id);
-            _meetingRepository.Remove(meeting);
-            _meetingRepository.SaveChanges();
-        }
-
-        public IEnumerable<MeetingDto> GetAll()
-        {
-            var meetings = _meetingRepository.GetAll();
-            return _mapper.Map<IEnumerable<MeetingDto>>(meetings);
-        }
-
-        public MeetingDto GetById(int id)
-        {
-            var meeting = _meetingRepository.GetById(id);
             return _mapper.Map<MeetingDto>(meeting);
         }
 
-        public MeetingDto UpdateMeeting(UpdateMeetingDto updateMeetingDto)
+        public async Task<IEnumerable<MeetingDto>> GetAllMeetingsAsync()
+        {
+            var meetings = await _meetingRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<MeetingDto>>(meetings);
+        }
+
+        public async Task<MeetingDto> GetMeetingByIdAsync(int id)
+        {
+            var meeting = await _meetingRepository.GetByIdAsync(id);
+            return _mapper.Map<MeetingDto>(meeting);
+        }
+
+        public async Task<IEnumerable<MeetingDto>> FindMeetingsAsync(Expression<Func<Meeting, bool>> predicate)
+        {
+            var meetings = await _meetingRepository.FindAsync(predicate);
+            return _mapper.Map<IEnumerable<MeetingDto>>(meetings);
+        }
+
+        public Task<MeetingDto> UpdateMeetingAsync(int id, UpdateMeetingDto updateMeetingDto)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task DeleteMeetingAsync(int id)
+        {
+            _meetingRepository.Remove(await _meetingRepository.GetByIdAsync(id));
+            await _meetingRepository.SaveChangesAsync();
         }
     }
 }
