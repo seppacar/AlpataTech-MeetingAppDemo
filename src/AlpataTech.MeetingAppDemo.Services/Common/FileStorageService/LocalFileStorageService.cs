@@ -1,12 +1,13 @@
-﻿namespace AlpataTech.MeetingAppDemo.Services.Common.FileService
-{
-    public class FileService : IFileService
-    {
-        private readonly string _baseDirectory;
+﻿using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
 
-        public FileService(string baseDirectory)
+namespace AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService
+{
+    public class LocalFileStorageService : IFileStorageService
+    {
+        private readonly string _baseDirectory = "temp";
+
+        public LocalFileStorageService()
         {
-            _baseDirectory = baseDirectory;
         }
 
         public async Task<string> UploadFileAsync(byte[] fileData, string fileName, string directory)
@@ -33,7 +34,7 @@
             }
         }
 
-        public bool isImage(byte[] fileData)
+        public Task<byte[]> GetFileAsync(string fileName)
         {
             throw new NotImplementedException();
         }

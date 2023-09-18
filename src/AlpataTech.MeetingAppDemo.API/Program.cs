@@ -1,6 +1,8 @@
 using AlpataTech.MeetingAppDemo.DAL.Extensions;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
 using AlpataTech.MeetingAppDemo.Services.Common.Mapper;
+using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
+using AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
 
@@ -23,6 +25,21 @@ builder.Services.AddScoped<MeetingRepository>();
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMeetingService, MeetingService>();
+
+// Storage Service
+var storageOption = builder.Configuration.GetValue<string>("FileStorageOptions:StorageType");
+
+switch (storageOption)
+{
+    case "local":
+        builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+        break;
+    case "azure":
+        builder.Services.AddScoped<IFileStorageService, AzureBlobStorageService>();
+        break;
+    default:
+        throw new Exception("Cannot fetch file storage FileStorageOptions from appsettings.json");
+}
 
 // Automapper Profiles
 builder.Services.AddAutoMapper(typeof(UserProfile));
