@@ -1,10 +1,8 @@
-using AlpataTech.MeetingAppDemo.DAL.Context;
 using AlpataTech.MeetingAppDemo.DAL.Extensions;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
 using AlpataTech.MeetingAppDemo.Services.Mapper;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // TODO: Database Configuration
-//var dbConnectionString = builder.Configuration.GetConnectionString("Development");
-//builder.Services.SetupDbContext(dbConnectionString);
-builder.Services.AddDbContext<ApplicationDbContext>();
-
+var dbConnectionString = builder.Configuration.GetConnectionString("Development");
+builder.Services.SetupDbContext(dbConnectionString);
 // Repositories
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<MeetingRepository>();
