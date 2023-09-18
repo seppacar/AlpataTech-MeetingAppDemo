@@ -4,16 +4,17 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService
 {
     public class LocalFileStorageService : IFileStorageService
     {
-        private readonly string _baseDirectory = "temp";
+        private readonly string _storagePath;
 
-        public LocalFileStorageService()
+        public LocalFileStorageService(string storagePath)
         {
+            _storagePath = storagePath;
         }
 
         public async Task<string> UploadFileAsync(byte[] fileData, string fileName, string directory)
         {
             // Ensure the directory exists
-            string targetDirectory = Path.Combine(_baseDirectory, directory);
+            string targetDirectory = Path.Combine(_storagePath, directory);
             Directory.CreateDirectory(targetDirectory);
 
             // Combine the directory and file name to get the file path

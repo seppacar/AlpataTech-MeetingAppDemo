@@ -32,9 +32,13 @@ var storageOption = builder.Configuration.GetValue<string>("FileStorageOptions:S
 switch (storageOption)
 {
     case "local":
-        builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+        // Register the local file storage service with the storage path
+        var localFileStoragePath = builder.Configuration.GetValue<string>("FileStorageOptions:LocalFileStoragePath");
+        builder.Services.AddScoped<IFileStorageService>(
+            serviceProvider => new LocalFileStorageService(localFileStoragePath));
         break;
     case "azure":
+        // Here just for demo
         builder.Services.AddScoped<IFileStorageService, AzureBlobStorageService>();
         break;
     default:
