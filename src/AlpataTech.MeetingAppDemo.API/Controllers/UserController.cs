@@ -48,8 +48,8 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
         {
             var updatedUser = await _userService.UpdateUserAsync(id, updateUserDto);
-            
-            if(updatedUser == null)
+
+            if (updatedUser == null)
             {
                 return NotFound();
             }

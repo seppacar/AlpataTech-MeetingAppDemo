@@ -9,7 +9,7 @@ namespace AlpataTech.MeetingAppDemo.Entities
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Description is required")]
-        public string Description { get; set;}
+        public string Description { get; set; }
 
         [Required(ErrorMessage = "StartTime is required")]
         public DateTime StartTime { get; set; }

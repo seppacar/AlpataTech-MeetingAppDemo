@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using AlpataTech.MeetingAppDemo.Entities;
+﻿using AlpataTech.MeetingAppDemo.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AlpataTech.MeetingAppDemo.DAL.Context
 {

@@ -1,6 +1,6 @@
 ﻿using AlpataTech.MeetingAppDemo.DAL.Context;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AlpataTech.MeetingAppDemo.DAL.Extensions
 {

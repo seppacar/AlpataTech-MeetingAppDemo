@@ -1,5 +1,4 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
-using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +29,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         public async Task<IActionResult> GetMeetingById(int id)
         {
             var meeting = await _meetingService.GetMeetingByIdAsync(id);
-            if (meeting == null) 
+            if (meeting == null)
             {
                 return NotFound();
             }

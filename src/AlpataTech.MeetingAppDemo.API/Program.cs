@@ -1,6 +1,6 @@
 using AlpataTech.MeetingAppDemo.DAL.Extensions;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
-using AlpataTech.MeetingAppDemo.Services.Mapper;
+using AlpataTech.MeetingAppDemo.Services.Common.Mapper;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
 
@@ -38,9 +38,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// Configure static files
-app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
