@@ -5,6 +5,8 @@ using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
 using AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +17,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// TODO: Database Configuration
+// Database Configuration
 var dbConnectionString = builder.Configuration.GetConnectionString("Development");
 builder.Services.SetupDbContext(dbConnectionString);
+
 // Repositories
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<MeetingRepository>();
@@ -50,6 +53,20 @@ builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddAutoMapper(typeof(MeetingProfile));
 builder.Services.AddAutoMapper(typeof(MeetingParticipantProfile));
 builder.Services.AddAutoMapper(typeof(MeetingDocumentProfile));
+
+// JSON Web Token Authentication
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("String"))
+        };
+    }
+);
+
 
 var app = builder.Build();
 
