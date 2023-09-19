@@ -1,6 +1,7 @@
 ﻿using AlpataTech.MeetingAppDemo.DAL.Repository;
 using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
+using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AutoMapper;
 using System.Linq.Expressions;
 
@@ -19,6 +20,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         public async Task<MeetingDto> CreateMeetingAsync(CreateMeetingDto createMeetingDto)
         {
             var meeting = _mapper.Map<Meeting>(createMeetingDto);
+            await _meetingRepository.AddAsync(meeting);
 
             return _mapper.Map<MeetingDto>(meeting);
         }
@@ -41,9 +43,24 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             return _mapper.Map<IEnumerable<MeetingDto>>(meetings);
         }
 
-        public Task<MeetingDto> UpdateMeetingAsync(int id, UpdateMeetingDto updateMeetingDto)
+        public async Task<MeetingDto> UpdateMeetingAsync(int id, UpdateMeetingDto updateMeetingDto)
         {
-            throw new NotImplementedException();
+            var meetingToUpdate = await _meetingRepository.GetByIdAsync(id);
+
+            if(meetingToUpdate == null) 
+            {
+                return null;
+            }
+
+            // Update the user properties with the values from updateUserDto
+            _mapper.Map(updateMeetingDto, meetingToUpdate);
+
+            // Update the user in the repository
+            _meetingRepository.Update(meetingToUpdate);
+            await _meetingRepository.SaveChangesAsync();
+
+            // Map and return the updated user
+            return _mapper.Map<MeetingDto>(meetingToUpdate);
         }
 
         public async Task DeleteMeetingAsync(int id)

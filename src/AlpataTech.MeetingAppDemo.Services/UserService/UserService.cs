@@ -74,9 +74,27 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             return _mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public Task<UserDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
+        public async Task<UserDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto)
         {
-            throw new NotImplementedException();
+            var userToUpdate = await _userRepository.GetByIdAsync(id);
+
+            if (userToUpdate !=  null)
+            {
+                // Handle the case where the user doesn't exist
+                return null;
+            }
+
+            // Update the user properties with the values from updateUserDto
+            _mapper.Map(updateUserDto, userToUpdate);
+
+            // TODO: If there's a new profile picture, update it
+
+            // Update the user in the repository
+            _userRepository.Update(userToUpdate);
+            await _userRepository.SaveChangesAsync();
+
+            // Map and return the updated user
+            return _mapper.Map<UserDto>(userToUpdate);
         }
 
         public async Task DeleteUserAsync(int id)
