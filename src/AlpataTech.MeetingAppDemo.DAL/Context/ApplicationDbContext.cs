@@ -26,6 +26,19 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
             modelBuilder.Entity<Meeting>()
                 .Navigation(m => m.Participants)
                 .AutoInclude();
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.Roles)
+                .AutoInclude();
+            modelBuilder.Entity<UserRole>()
+                .Navigation(ur => ur.Role)
+                .AutoInclude();
+
+            // Seed roles (assuming you have a Roles DbSet)
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, Name = "Admin" },
+                new Role { Id = 2, Name = "User" }
+            // Add other roles as needed
+            );
 
             // Seed Users
             modelBuilder.Entity<User>().HasData(
@@ -72,6 +85,15 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                         ProfileImage = "test.png"
                     }
             }
+            );
+
+            // Seed UserRole (join table) to establish relationships
+            modelBuilder.Entity<UserRole>().HasData(
+                new UserRole { Id = 1, UserId = 1, RoleId = 1 },
+                new UserRole { Id = 2, UserId = 2, RoleId = 1 },
+                new UserRole { Id = 3, UserId = 3, RoleId = 2 },
+                new UserRole { Id = 4, UserId = 4, RoleId = 2 },
+                new UserRole { Id = 5, UserId = 1, RoleId = 2 }
             );
 
             // Seed Meetings

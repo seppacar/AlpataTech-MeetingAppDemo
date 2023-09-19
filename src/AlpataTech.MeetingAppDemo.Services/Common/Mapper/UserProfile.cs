@@ -8,7 +8,8 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.Mapper
     {
         public UserProfile()
         {
-            CreateMap<User, UserDto>(); // Map User to UserDto
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(ur => ur.Role.Name)));
             CreateMap<CreateUserDto, User>(); // Map CreateUserDto to User
             CreateMap<UpdateUserDto, User>(); // Map UpdateUserDto to User
         }

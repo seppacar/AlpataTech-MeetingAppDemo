@@ -21,5 +21,7 @@ namespace AlpataTech.MeetingAppDemo.Entities
 
         [Required]
         public String ProfileImage { get; set; } = String.Empty;
+
+        public List<UserRole> Roles { get; set; }
     }
 }

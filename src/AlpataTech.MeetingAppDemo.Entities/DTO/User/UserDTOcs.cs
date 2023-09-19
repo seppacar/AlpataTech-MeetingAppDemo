@@ -16,5 +16,7 @@ namespace AlpataTech.MeetingAppDemo.Entities.DTO.User
         public string? PhoneNumber { get; set; }
 
         public string ProfileImage { get; set; }
+
+        public List<string> Roles { get; set; }
     }
 }
