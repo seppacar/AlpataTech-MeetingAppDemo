@@ -9,6 +9,7 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
         Task<UserDto> CreateUserAsync(CreateUserDto createUserDto, byte[] profilePictureBytes);
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<UserDto> GetUserByIdAsync(int id);
+        Task<User> GetUserByEmailAsync(string email);
         Task<IEnumerable<UserDto>> FindUsersAsync(Expression<Func<User, bool>> predicate);
         Task<UserDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto);
         Task DeleteUserAsync(int id);

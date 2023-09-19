@@ -1,12 +1,15 @@
 using AlpataTech.MeetingAppDemo.DAL.Extensions;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
-using AlpataTech.MeetingAppDemo.Services.Common.Mapper;
+using AlpataTech.MeetingAppDemo.Services.AuthService;
 using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
 using AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService;
+using AlpataTech.MeetingAppDemo.Services.Common.Mapper;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +18,33 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer",
+        new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Enter the JWT string as following: `Bearer Generated-JWT`",
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        }
+        );
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] { }
+            }
+        });
+});
+
 
 // Database Configuration
 var dbConnectionString = builder.Configuration.GetConnectionString("Development");
@@ -28,15 +57,16 @@ builder.Services.AddScoped<MeetingRepository>();
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMeetingService, MeetingService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Storage Service
-var storageOption = builder.Configuration.GetValue<string>("FileStorageOptions:StorageType");
+var storageOption = builder.Configuration["FileStorageOptions:StorageType"];
 
 switch (storageOption)
 {
     case "local":
         // Register the local file storage service with the storage path
-        var localFileStoragePath = builder.Configuration.GetValue<string>("FileStorageOptions:LocalFileStoragePath");
+        var localFileStoragePath = builder.Configuration["FileStorageOptions:LocalFileStoragePath"];
         builder.Services.AddScoped<IFileStorageService>(
             serviceProvider => new LocalFileStorageService(localFileStoragePath));
         break;
@@ -54,6 +84,9 @@ builder.Services.AddAutoMapper(typeof(MeetingProfile));
 builder.Services.AddAutoMapper(typeof(MeetingParticipantProfile));
 builder.Services.AddAutoMapper(typeof(MeetingDocumentProfile));
 
+Console.WriteLine("ASFGAIJWFIOWAJFIOWAJF");
+Console.WriteLine(builder.Configuration["Authentication:JWT:Audience"]);
+
 // JSON Web Token Authentication
 builder.Services.AddAuthentication().AddJwtBearer(options =>
     {
@@ -62,7 +95,9 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
             ValidateIssuerSigningKey = true,
             ValidateAudience = true,
             ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("String"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Authentication:JWT:Secret"])),
+            ValidAudience = builder.Configuration["Authentication:JWT:Audience"],
+            ValidIssuer = builder.Configuration["Authentication:JWT:Issuer"]
         };
     }
 );

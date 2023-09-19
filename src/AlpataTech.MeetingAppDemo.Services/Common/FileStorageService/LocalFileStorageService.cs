@@ -52,7 +52,7 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService
             {
                 // Combine the storage path with the file name to get the full file path
                 string filePath = Path.Combine(_storagePath, fileName);
-                Console.WriteLine("YOUR FİLE İSSS"+ filePath);
+                Console.WriteLine("YOUR FİLE İSSS" + filePath);
                 // Check if the file exists
                 if (!File.Exists(filePath))
                 {

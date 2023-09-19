@@ -1,7 +1,6 @@
 ﻿using AlpataTech.MeetingAppDemo.DAL.Repository;
 using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
-using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AutoMapper;
 using System.Linq.Expressions;
 
@@ -47,7 +46,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         {
             var meetingToUpdate = await _meetingRepository.GetByIdAsync(id);
 
-            if(meetingToUpdate == null) 
+            if (meetingToUpdate == null)
             {
                 return null;
             }

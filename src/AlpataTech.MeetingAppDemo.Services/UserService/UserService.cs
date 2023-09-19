@@ -68,6 +68,18 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             return _mapper.Map<UserDto>(user);
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            Expression<Func<User, bool>> predicate = user => user.Email == email;
+            // Use the FindAsync method with the predicate
+            var users = await _userRepository.FindAsync(predicate);
+
+            // Retrieve the first user that matches the predicate (or null if not found)
+            var user = users.FirstOrDefault();
+
+            return user;
+        }
+
         public async Task<IEnumerable<UserDto>> FindUsersAsync(Expression<Func<User, bool>> predicate)
         {
             var users = await _userRepository.FindAsync(predicate);
@@ -78,7 +90,7 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
         {
             var userToUpdate = await _userRepository.GetByIdAsync(id);
 
-            if (userToUpdate !=  null)
+            if (userToUpdate != null)
             {
                 // Handle the case where the user doesn't exist
                 return null;
@@ -110,7 +122,7 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             {
                 if (user.ProfileImage != null)
                 {
-                    Console.WriteLine("USER PROFİLE İMAGE İS"+user.ProfileImage);
+                    Console.WriteLine("USER PROFİLE İMAGE İS" + user.ProfileImage);
                     return await _fileStorageService.GetFileAsync(user.ProfileImage);
                 }
                 else
