@@ -6,6 +6,9 @@
 # Code-First Migration Folder
 [Mm]igrations/
 
+# Local File Storage Folder
+[Uu]ploads/
+
 # User-specific files
 *.rsuser
 *.suo

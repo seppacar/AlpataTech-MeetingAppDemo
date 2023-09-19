@@ -11,10 +11,10 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService
             _storagePath = storagePath;
         }
 
-        public async Task<string> UploadFileAsync(byte[] fileData, string fileName, string directory)
+        public async Task<string> UploadFileAsync(byte[] fileData, string fileName)
         {
             // Ensure the directory exists
-            string targetDirectory = Path.Combine(_storagePath, directory);
+            string targetDirectory = Path.Combine(_storagePath);
             Directory.CreateDirectory(targetDirectory);
 
             // Combine the directory and file name to get the file path
@@ -26,18 +26,47 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService
             return filePath;
         }
 
-        public async Task DeleteFileAsync(string filePath)
+        public async Task DeleteFileAsync(string fileName)
         {
-            // Check if the file exists and delete it
-            if (File.Exists(filePath))
+            try
             {
-                await Task.Run(() => File.Delete(filePath));
+                // Combine the storage path with the file name to get the full file path
+                string filePath = Path.Combine(_storagePath, fileName);
+
+                // Check if the file exists and delete it
+                if (File.Exists(filePath))
+                {
+                    await Task.Run(() => File.Delete(filePath));
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions according to your requirements
+                throw new Exception("An error occurred while deleting the file.", ex);
             }
         }
 
         public Task<byte[]> GetFileAsync(string fileName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Combine the storage path with the file name to get the full file path
+                string filePath = Path.Combine(_storagePath, fileName);
+                Console.WriteLine("YOUR FİLE İSSS"+ filePath);
+                // Check if the file exists
+                if (!File.Exists(filePath))
+                {
+                    throw new FileNotFoundException("File not found.", filePath);
+                }
+
+                // Read the file into a byte array
+                return Task.Run(() => File.ReadAllBytes(filePath));
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions according to your requirements
+                throw new Exception("An error occurred while reading the file.", ex);
+            }
         }
     }
 }

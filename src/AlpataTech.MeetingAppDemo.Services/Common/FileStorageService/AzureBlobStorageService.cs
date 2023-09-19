@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AlpataTech.MeetingAppDemo.Services.Common.FileStorageService
+﻿namespace AlpataTech.MeetingAppDemo.Services.Common.FileStorageService
 {
     public class AzureBlobStorageService : IFileStorageService
     {
-        public Task<string> UploadFileAsync(byte[] fileData, string fileName, string directory)
+        public Task<string> UploadFileAsync(byte[] fileData, string fileName)
         {
             throw new NotImplementedException();
         }
