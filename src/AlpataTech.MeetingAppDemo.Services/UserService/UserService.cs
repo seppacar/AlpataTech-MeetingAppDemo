@@ -80,6 +80,11 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             return user;
         }
 
+        public Task<List<string>> GetUserRolesByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<UserDto>> FindUsersAsync(Expression<Func<User, bool>> predicate)
         {
             var users = await _userRepository.FindAsync(predicate);
