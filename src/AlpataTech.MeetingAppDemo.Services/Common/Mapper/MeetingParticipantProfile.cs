@@ -9,7 +9,7 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.Mapper
         public MeetingParticipantProfile()
         {
             CreateMap<MeetingParticipant, MeetingParticipantDto>();
-            CreateMap<MeetingParticipantDto, MeetingParticipantDto>();
+            CreateMap<MeetingParticipantDto, MeetingParticipant>();
         }
     }
 }

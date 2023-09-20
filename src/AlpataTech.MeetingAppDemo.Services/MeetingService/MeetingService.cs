@@ -1,6 +1,8 @@
 ﻿using AlpataTech.MeetingAppDemo.DAL.Repository;
 using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
+using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingParticipant;
+using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
 using AutoMapper;
 using System.Linq.Expressions;
 
@@ -9,11 +11,13 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
     public class MeetingService : IMeetingService
     {
         private readonly MeetingRepository _meetingRepository;
+        private readonly IFileStorageService _fileStorageService;
         private readonly IMapper _mapper;
 
-        public MeetingService(MeetingRepository meetingRepository, IMapper mapper)
+        public MeetingService(MeetingRepository meetingRepository, IFileStorageService fileStorageService, IMapper mapper)
         {
             _meetingRepository = meetingRepository;
+            _fileStorageService = fileStorageService;
             _mapper = mapper;
         }
         public async Task<MeetingDto> CreateMeetingAsync(CreateMeetingDto createMeetingDto)
@@ -66,6 +70,40 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         {
             _meetingRepository.Remove(await _meetingRepository.GetByIdAsync(id));
             await _meetingRepository.SaveChangesAsync();
+        }
+
+        public async Task<MeetingDto> AddMeetingParticipantAsync(int meetingId, MeetingParticipantDto meetingParticipantDto)
+        {
+            var meeting = await _meetingRepository.GetByIdAsync(meetingId);
+            if(meeting == null)
+            {
+                throw new Exception("Meeting not found");
+            }
+
+            var meetingParticipant = _mapper.Map<MeetingParticipant>(meetingParticipantDto);
+
+            // Add participant
+            meeting.Participants.Add(meetingParticipant);
+
+            await _meetingRepository.SaveChangesAsync();
+
+            return _mapper.Map<MeetingDto>(meeting);
+        }
+
+        public async Task<MeetingDto> AddMeetingDocumentAsync(int meetingId, FileUploadModel meetingDocument)
+        {
+            var meeting = await _meetingRepository.GetByIdAsync(meetingId);
+            if (meeting == null)
+            {
+                throw new Exception("Meeting not found");
+            }
+
+            // Generate filename for meeting document
+            string fileName = "meetingdoc_" + Guid.NewGuid().ToString() + meetingDocument.FileExtension;
+
+            var filePath = await _fileStorageService.UploadFileAsync(meetingDocument.FileData, fileName);
+
+            return _mapper.Map<MeetingDto>(meeting);
         }
     }
 }

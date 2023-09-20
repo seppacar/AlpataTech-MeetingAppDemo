@@ -84,9 +84,6 @@ builder.Services.AddAutoMapper(typeof(MeetingProfile));
 builder.Services.AddAutoMapper(typeof(MeetingParticipantProfile));
 builder.Services.AddAutoMapper(typeof(MeetingDocumentProfile));
 
-Console.WriteLine("ASFGAIJWFIOWAJFIOWAJF");
-Console.WriteLine(builder.Configuration["Authentication:JWT:Audience"]);
-
 // JSON Web Token Authentication
 builder.Services.AddAuthentication().AddJwtBearer(options =>
     {
