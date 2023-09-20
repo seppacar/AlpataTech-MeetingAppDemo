@@ -32,6 +32,9 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
             modelBuilder.Entity<UserRole>()
                 .Navigation(ur => ur.Role)
                 .AutoInclude();
+            modelBuilder.Entity<MeetingParticipant>()
+                .Navigation(mp => mp.User)
+                .AutoInclude();
 
             // Seed roles (assuming you have a Roles DbSet)
             modelBuilder.Entity<Role>().HasData(

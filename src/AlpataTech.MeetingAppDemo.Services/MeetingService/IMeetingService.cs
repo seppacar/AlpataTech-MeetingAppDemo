@@ -1,7 +1,6 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
 using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingParticipant;
-using AlpataTech.MeetingAppDemo.Services.Common.Mapper;
 using System.Linq.Expressions;
 
 namespace AlpataTech.MeetingAppDemo.Services.MeetingService
@@ -14,7 +13,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         Task<IEnumerable<MeetingDto>> FindMeetingsAsync(Expression<Func<Meeting, bool>> predicate);
         Task<MeetingDto> UpdateMeetingAsync(int id, UpdateMeetingDto updateMeetingDto);
         Task DeleteMeetingAsync(int id);
-        Task<MeetingDto> AddMeetingParticipantAsync(int meetingId, MeetingParticipantDto meetingParticipantDto);
+        Task<MeetingDto> AddMeetingParticipantAsync(int meetingId, CreateMeetingParticipantDto createMeetingParticipantDto);
         Task<MeetingDto> AddMeetingDocumentAsync(int meetingId, FileUploadModel meetingDocument);
     }
 }

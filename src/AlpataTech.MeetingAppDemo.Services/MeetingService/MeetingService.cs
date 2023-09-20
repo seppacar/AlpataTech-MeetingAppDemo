@@ -72,15 +72,17 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             await _meetingRepository.SaveChangesAsync();
         }
 
-        public async Task<MeetingDto> AddMeetingParticipantAsync(int meetingId, MeetingParticipantDto meetingParticipantDto)
+        public async Task<MeetingDto> AddMeetingParticipantAsync(int meetingId, CreateMeetingParticipantDto createMeetingParticipantDto)
         {
             var meeting = await _meetingRepository.GetByIdAsync(meetingId);
             if(meeting == null)
             {
                 throw new Exception("Meeting not found");
             }
-
-            var meetingParticipant = _mapper.Map<MeetingParticipant>(meetingParticipantDto);
+            
+            var meetingParticipant = _mapper.Map<MeetingParticipant>(createMeetingParticipantDto);
+            // Set meetingId for meetingParticipant object
+            meetingParticipant.MeetingId = meetingId;
 
             // Add participant
             meeting.Participants.Add(meetingParticipant);

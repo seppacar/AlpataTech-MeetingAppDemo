@@ -65,9 +65,9 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPost("{id}/participants")]
-        public async Task<IActionResult> AddMeetingParticipant(int id, [FromBody] MeetingParticipantDto meetingParticipantDto)
+        public async Task<IActionResult> AddMeetingParticipant(int id, [FromBody] CreateMeetingParticipantDto createMeetingParticipantDto)
         {
-            return Ok(await _meetingService.AddMeetingParticipantAsync(id, meetingParticipantDto));
+            return Ok(await _meetingService.AddMeetingParticipantAsync(id, createMeetingParticipantDto));
         }
     }
 }
