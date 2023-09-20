@@ -32,8 +32,14 @@ namespace AlpataTech.MeetingAppDemo.Services.AuthService
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                // TODO: Add role claims here
             };
+
+            // Get User Roles and add to JWT Claims
+            var roles = await _userService.GetUserRolesByIdAsync(user.Id);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+            }
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:JWT:Secret"]));
 

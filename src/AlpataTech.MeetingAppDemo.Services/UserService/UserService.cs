@@ -80,9 +80,19 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             return user;
         }
 
-        public Task<List<string>> GetUserRolesByIdAsync(int id)
+        public async Task<List<string>> GetUserRolesByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+            var userDto = _mapper.Map<UserDto>(user);
+
+            var roles = userDto.Roles;
+
+            return roles;
         }
 
         public async Task<IEnumerable<UserDto>> FindUsersAsync(Expression<Func<User, bool>> predicate)

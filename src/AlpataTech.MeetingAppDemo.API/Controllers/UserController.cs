@@ -1,5 +1,6 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
@@ -75,6 +76,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
         {
             var updatedUser = await _userService.UpdateUserAsync(id, updateUserDto);
@@ -87,6 +89,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _userService.DeleteUserAsync(id);
@@ -95,10 +98,23 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
 
         // Retrieving user profilepicture here but maybe we could TODO: sent as base 64 with all details
         [HttpGet("{id}/profilePicture")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> GetUserProfilePicture(int id)
         {
             byte[]? profilePictureBytes = await _userService.GetProfilePicture(id);
             return File(profilePictureBytes, "image/jpeg"); // Adjust the content type if needed
         }
+
+        [HttpGet("roles/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetRoles(int id)
+        {
+            var roles = await _userService.GetUserRolesByIdAsync(id);
+            return Ok(roles);
+        }
+
+        // TODO: Change password
+        // TODO: Update Profile
+        // TODO: Change Profile Picture
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
@@ -19,6 +20,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         /* Admin Authorized Routes */
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllMeetings()
         {
             var meetings = await _meetingService.GetAllMeetingsAsync();
@@ -26,6 +28,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetMeetingById(int id)
         {
             var meeting = await _meetingService.GetMeetingByIdAsync(id);
@@ -37,6 +40,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> CreateMeeting([FromBody] CreateMeetingDto createMeetingDto)
         {
             var meetingDto = await _meetingService.CreateMeetingAsync(createMeetingDto);
@@ -44,6 +48,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPost("{id}")]
+        // TODO: Authorize Organizer and Admin
         public async Task<IActionResult> UpdateMeeting(int id, [FromBody] UpdateMeetingDto updateMeetingDto)
         {
             var meeting = await _meetingService.UpdateMeetingAsync(id, updateMeetingDto);
@@ -51,6 +56,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpDelete]
+        // TODO: Authorize Organizer and Admin
         public async Task<IActionResult> DeleteMeeting(int id)
         {
             await _meetingService.DeleteMeetingAsync(id);
