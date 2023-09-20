@@ -6,7 +6,7 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
 {
     public interface IUserService
     {
-        Task<UserDto> CreateUserAsync(CreateUserDto createUserDto, byte[] profilePictureBytes);
+        Task<UserDto> CreateUserAsync(CreateUserDto createUserDto, FileUploadModel profilePictureFile);
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
         Task<UserDto> GetUserByIdAsync(int id);
         Task<User> GetUserByEmailAsync(string email);

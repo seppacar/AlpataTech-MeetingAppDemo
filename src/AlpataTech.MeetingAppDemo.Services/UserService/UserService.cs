@@ -20,7 +20,7 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             _fileStorageService = fileStorageService;
         }
 
-        public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto, byte[]? profilePictureBytes)
+        public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto, FileUploadModel? profilePictureFile)
         {
             // Map createUserDto type to User type
             var user = _mapper.Map<User>(createUserDto);
@@ -30,14 +30,14 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             user.PasswordHash = passwordHash;
 
             // Save profile image and set profile image path
-            if (profilePictureBytes != null)
+            if (profilePictureFile.FileData != null)
             {
                 // Adjust the directory and file name as needed
-                string fileName = "pfp_" + Guid.NewGuid().ToString() + Path.GetExtension(".png");
+                string fileName = "pfp_" + Guid.NewGuid().ToString() + profilePictureFile.FileExtension;
                 //string filePath = await _fileStorageService.UploadFileAsync(profilePictureBytes, fileName);
 
                 // Call the service to upload the file
-                _fileStorageService.UploadFileAsync(profilePictureBytes, fileName);
+                _fileStorageService.UploadFileAsync(profilePictureFile.FileData, fileName);
 
                 // Store JUST filename since we are using one folder for all files for now
                 user.ProfileImage = fileName;
