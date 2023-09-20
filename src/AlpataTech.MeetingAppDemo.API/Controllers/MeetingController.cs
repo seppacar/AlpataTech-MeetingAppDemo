@@ -20,7 +20,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         /* Admin Authorized Routes */
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllMeetings()
         {
             var meetings = await _meetingService.GetAllMeetingsAsync();
@@ -28,7 +28,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetMeetingById(int id)
         {
             var meeting = await _meetingService.GetMeetingByIdAsync(id);
@@ -40,7 +40,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         public async Task<IActionResult> CreateMeeting([FromBody] CreateMeetingDto createMeetingDto)
         {
             var meetingDto = await _meetingService.CreateMeetingAsync(createMeetingDto);
