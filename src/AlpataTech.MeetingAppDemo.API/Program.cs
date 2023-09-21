@@ -53,6 +53,7 @@ builder.Services.SetupDbContext(dbConnectionString);
 // Repositories
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<MeetingRepository>();
+builder.Services.AddScoped<MeetingDocumentRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -83,6 +84,7 @@ builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddAutoMapper(typeof(MeetingProfile));
 builder.Services.AddAutoMapper(typeof(MeetingParticipantProfile));
 builder.Services.AddAutoMapper(typeof(MeetingDocumentProfile));
+builder.Services.AddAutoMapper(typeof(FileUploadModelProfile));
 
 // JSON Web Token Authentication
 builder.Services.AddAuthentication().AddJwtBearer(options =>

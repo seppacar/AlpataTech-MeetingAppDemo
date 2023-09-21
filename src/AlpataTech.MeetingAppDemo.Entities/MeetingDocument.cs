@@ -8,5 +8,6 @@ namespace AlpataTech.MeetingAppDemo.Entities
         public Meeting Meeting { get; set; }
         public string DocumentTitle { get; set; }
         public string DocumentPath { get; set; }
+        public string DocumentType { get; set; }
     }
 }

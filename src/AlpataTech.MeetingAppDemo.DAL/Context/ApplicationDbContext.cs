@@ -128,6 +128,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                     Id = 1,
                     MeetingId = 1, // Associated with Meeting 1
                     DocumentTitle = "Document 1",
+                    DocumentType = "NONE",
                     DocumentPath = "path/to/document1.pdf",
                 },
                 new MeetingDocument
@@ -135,6 +136,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                     Id = 2,
                     MeetingId = 2, // Associated with Meeting 2
                     DocumentTitle = "Document 2",
+                    DocumentType = "NONE",
                     DocumentPath = "path/to/document2.pdf",
                 }
             );

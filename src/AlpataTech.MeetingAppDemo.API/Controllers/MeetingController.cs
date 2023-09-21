@@ -1,8 +1,12 @@
-﻿using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
+﻿using AlpataTech.MeetingAppDemo.Entities;
+using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
+using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingDocument;
 using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingParticipant;
+using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
 {
@@ -69,5 +73,61 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         {
             return Ok(await _meetingService.AddMeetingParticipantAsync(id, createMeetingParticipantDto));
         }
+
+        [HttpPost("{id}/documents")]
+        public async Task<IActionResult> AddMeetingDocument(int id, IFormFile meetingDocumentFile)
+        {
+            string[] permittedExtensions = { ".pdf", ".docx", ".pptx", "webp" };
+
+            var fileExtension = Path.GetExtension(meetingDocumentFile.FileName).ToLower();
+            var meetingDocumentFileModel = new FileUploadModel {
+                FileName = Path.GetExtension(meetingDocumentFile.FileName).ToLower(),
+                FileExtension = fileExtension,
+            };
+
+            if (!permittedExtensions.Contains(fileExtension))
+            {
+                return BadRequest($"Unsupported file extension. Permitted extensions: {permittedExtensions.ToString()}");
+            }
+
+            var meetingDocumentUploadObject = new FileUploadModel
+            {
+                FileName = meetingDocumentFile.FileName,
+                FileExtension = fileExtension,
+                ContentType = meetingDocumentFile.ContentType,
+            };
+
+            // Convert IFormFile to byte array for the profile picture
+            using (var ms = new MemoryStream())
+            {
+                await meetingDocumentFile.CopyToAsync(ms);
+                meetingDocumentUploadObject.FileData = ms.ToArray();
+            }
+
+            var createdMeetingDocument = await _meetingService.AddMeetingDocumentAsync(id, meetingDocumentUploadObject);
+
+            // TODO: convert to created at action
+            return Ok(meetingDocumentUploadObject);
+        }
+
+        [HttpGet("{meetingId}/documents/{meetingDocumentId}/download")]
+        public async Task<IActionResult> GetMeetingDocumentFile(int meetingId, int meetingDocumentId)
+        {
+            var meetingDocumentFileBytes = await _meetingService.GetMeetingDocumentFileAsync(meetingId, meetingDocumentId);
+            var meetingDocumentObject = await _meetingService.GetMeetingDocumentObjectAsync(meetingId, meetingDocumentId);
+
+            // Set headers for file download
+            Response.Headers.Add($"Content-Disposition", $"attachment; filename={meetingDocumentObject.DocumentTitle}");
+            // Send the file content as the response
+            return File(meetingDocumentFileBytes, "application/octet-stream");
+        }
+
+        [HttpDelete("{meetingId}/documents/{meetingDocumentId}")]
+        public async Task<IActionResult> RemoveMeetingDocument(int meetingId, int meetingDocumentId)
+        {
+            await _meetingService.RemoveMeetingDocumentAsync(meetingId, meetingDocumentId);
+            return NoContent();
+        }
+
     }
 }
