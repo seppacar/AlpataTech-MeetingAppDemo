@@ -130,7 +130,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             var meetingDocumentObject = await _meetingDocumentRepository.GetByIdAsync(meetingDocumentId);
             if (meetingDocumentObject == null)
             {
-                throw new Exception("Meeting not found");
+                throw new Exception("Meeting document not found");
             }
             return _mapper.Map<MeetingDocumentDto>(meetingDocumentObject);
         }
@@ -145,7 +145,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             var meetingDocumentObject = await _meetingDocumentRepository.GetByIdAsync(meetingDocumentId);
             if (meetingDocumentObject == null)
             {
-                throw new Exception("Meeting not found");
+                throw new Exception("Meeting document not found");
             }
             var meetingDocumentFileBytes = await _fileStorageService.GetFileAsync(meetingDocumentObject.DocumentPath);
 
@@ -167,6 +167,28 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             _meetingDocumentRepository.Remove(meetingDocumentObject);
 
             await _meetingDocumentRepository.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsUserParticipant(int meetingId, int userId)
+        {
+            var meeting = await _meetingRepository.GetByIdAsync(meetingId);
+            if (meeting == null)
+            {
+                new Exception("Meeting not found");
+            }
+
+            return meeting.Participants.Any(participant => participant.Id == userId);
+        }
+
+        public async Task<bool> IsUserOrganizer(int meetingId, int userId)
+        {
+            var meeting = await _meetingRepository.GetByIdAsync(meetingId);
+            if (meeting == null)
+            {
+                new Exception("Meeting not found");
+            }
+
+            return meeting.OrganizerId == userId;
         }
     }
 }
