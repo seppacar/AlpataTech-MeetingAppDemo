@@ -19,7 +19,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         Task<MeetingDocumentDto> GetMeetingDocumentObjectAsync(int meetingId, int meetingDocumentId);
         Task<byte[]> GetMeetingDocumentFileAsync(int meetingId, int meetingDocumentId);
         Task RemoveMeetingDocumentAsync(int meetingId, int meetingDocumentId);
-        Task<bool> IsUserParticipant(int meetingId, int  userId);
+        Task<bool> IsUserParticipant(int meetingId, int userId);
         Task<bool> IsUserOrganizer(int meetingId, int userId);
     }
 }

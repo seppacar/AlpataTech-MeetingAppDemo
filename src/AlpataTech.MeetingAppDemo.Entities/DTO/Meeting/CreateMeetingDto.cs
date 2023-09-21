@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AlpataTech.MeetingAppDemo.Entities.DTO.Meeting
 {
@@ -12,7 +13,7 @@ namespace AlpataTech.MeetingAppDemo.Entities.DTO.Meeting
         public DateTime StartTime { get; set; }
         [Required]
         public DateTime EndTime { get; set; }
-        [Required]
+        [JsonIgnore]
         public int OrganizerId { get; set; }
     }
 }

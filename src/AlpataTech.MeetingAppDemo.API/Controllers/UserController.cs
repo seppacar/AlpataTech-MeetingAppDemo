@@ -21,6 +21,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllUsersAsync();

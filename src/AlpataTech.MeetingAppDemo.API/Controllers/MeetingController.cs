@@ -1,12 +1,10 @@
 ﻿using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
-using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingDocument;
 using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingParticipant;
-using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Security.Claims;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
 {
@@ -22,10 +20,8 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             _meetingService = meetingService;
         }
 
-        /* Admin Authorized Routes */
-
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllMeetings()
         {
             var meetings = await _meetingService.GetAllMeetingsAsync();
@@ -33,9 +29,18 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> GetMeetingById(int id)
         {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Only allow if request maker user is organizer or Participant or is "Admin"
+            if (!(await _meetingService.IsUserOrganizer(id, userId)) || !(await _meetingService.IsUserParticipant(id, userId) || !(User.IsInRole("Admin"))))
+            {
+                return Forbid();
+            }
+
             var meeting = await _meetingService.GetMeetingByIdAsync(id);
             if (meeting == null)
             {
@@ -45,42 +50,87 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "User")]
+        [Authorize]
         public async Task<IActionResult> CreateMeeting([FromBody] CreateMeetingDto createMeetingDto)
         {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            createMeetingDto.OrganizerId = userId;
+
             var meetingDto = await _meetingService.CreateMeetingAsync(createMeetingDto);
             return CreatedAtAction(nameof(GetMeetingById), new { id = meetingDto.Id }, meetingDto);
         }
 
-        [HttpPost("{id}")]
-        // TODO: Authorize Organizer and Admin
+        [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateMeeting(int id, [FromBody] UpdateMeetingDto updateMeetingDto)
         {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Only allow if request maker user is organizer or is "Admin"
+            if (!(await _meetingService.IsUserOrganizer(id, userId)) || !(User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
             var meeting = await _meetingService.UpdateMeetingAsync(id, updateMeetingDto);
             return Ok();
         }
 
         [HttpDelete]
+        [Authorize]
         // TODO: Authorize Organizer and Admin
         public async Task<IActionResult> DeleteMeeting(int id)
         {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Only allow if request maker user is organizer or is "Admin"
+            if (!(await _meetingService.IsUserOrganizer(id, userId)) || !(User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
             await _meetingService.DeleteMeetingAsync(id);
             return NoContent();
         }
 
         [HttpPost("{id}/participants")]
+        [Authorize]
         public async Task<IActionResult> AddMeetingParticipant(int id, [FromBody] CreateMeetingParticipantDto createMeetingParticipantDto)
         {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Only allow if request maker user is organizer or is "Admin"
+            if (!(await _meetingService.IsUserOrganizer(id, userId)) || !(User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
             return Ok(await _meetingService.AddMeetingParticipantAsync(id, createMeetingParticipantDto));
         }
 
         [HttpPost("{id}/documents")]
-        public async Task<IActionResult> AddMeetingDocument(int id, IFormFile meetingDocumentFile)
+        [Authorize]
+        public async Task<IActionResult> AddMeetingDocument(int meetingId, IFormFile meetingDocumentFile)
         {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Only allow if request maker user is organizer or is "Admin"
+            if (!(await _meetingService.IsUserOrganizer(meetingId, userId)) || !(User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
             string[] permittedExtensions = { ".pdf", ".docx", ".pptx", "webp" };
 
             var fileExtension = Path.GetExtension(meetingDocumentFile.FileName).ToLower();
-            var meetingDocumentFileModel = new FileUploadModel {
+            var meetingDocumentFileModel = new FileUploadModel
+            {
                 FileName = Path.GetExtension(meetingDocumentFile.FileName).ToLower(),
                 FileExtension = fileExtension,
             };
@@ -104,15 +154,26 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
                 meetingDocumentUploadObject.FileData = ms.ToArray();
             }
 
-            var createdMeetingDocument = await _meetingService.AddMeetingDocumentAsync(id, meetingDocumentUploadObject);
+            var createdMeetingDocument = await _meetingService.AddMeetingDocumentAsync(meetingId, meetingDocumentUploadObject);
 
             // TODO: convert to created at action
             return Ok(meetingDocumentUploadObject);
         }
 
         [HttpGet("{meetingId}/documents/{meetingDocumentId}/download")]
+        [Authorize]
         public async Task<IActionResult> GetMeetingDocumentFile(int meetingId, int meetingDocumentId)
         {
+            // Check if request maker is a participant
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Only allow if request maker user is organizer or is "Admin"
+            if (!(await _meetingService.IsUserParticipant(meetingId, userId)) || !(User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
             var meetingDocumentFileBytes = await _meetingService.GetMeetingDocumentFileAsync(meetingId, meetingDocumentId);
             var meetingDocumentObject = await _meetingService.GetMeetingDocumentObjectAsync(meetingId, meetingDocumentId);
 
@@ -123,11 +184,20 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpDelete("{meetingId}/documents/{meetingDocumentId}")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> RemoveMeetingDocument(int meetingId, int meetingDocumentId)
         {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Check if request maker user is organizer or Admin
+            if (!(await _meetingService.IsUserOrganizer(meetingId, userId)) || !(User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
             await _meetingService.RemoveMeetingDocumentAsync(meetingId, meetingDocumentId);
             return NoContent();
         }
-
     }
 }

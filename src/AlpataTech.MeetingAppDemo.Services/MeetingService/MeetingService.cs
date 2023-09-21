@@ -27,6 +27,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         {
             var meeting = _mapper.Map<Meeting>(createMeetingDto);
             await _meetingRepository.AddAsync(meeting);
+            await _meetingRepository.SaveChangesAsync();
 
             return _mapper.Map<MeetingDto>(meeting);
         }
@@ -78,11 +79,11 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         public async Task<MeetingDto> AddMeetingParticipantAsync(int meetingId, CreateMeetingParticipantDto createMeetingParticipantDto)
         {
             var meeting = await _meetingRepository.GetByIdAsync(meetingId);
-            if(meeting == null)
+            if (meeting == null)
             {
                 throw new Exception("Meeting not found");
             }
-            
+
             var meetingParticipant = _mapper.Map<MeetingParticipant>(createMeetingParticipantDto);
             // Set meetingId for meetingParticipant object
             meetingParticipant.MeetingId = meetingId;
@@ -104,7 +105,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             }
 
             string fileName = "meetingdoc_" + Guid.NewGuid().ToString() + meetingDocumentUploadObject.FileExtension;
-            
+
             await _fileStorageService.UploadFileAsync(meetingDocumentUploadObject.FileData, fileName);
 
             var meetingDocument = _mapper.Map<MeetingDocument>(meetingDocumentUploadObject);
@@ -123,7 +124,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         public async Task<MeetingDocumentDto> GetMeetingDocumentObjectAsync(int meetingId, int meetingDocumentId)
         {
             var meeting = await _meetingRepository.GetByIdAsync(meetingId);
-            if(meeting == null)
+            if (meeting == null)
             {
                 throw new Exception("Meeting not found");
             }
@@ -174,7 +175,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             var meeting = await _meetingRepository.GetByIdAsync(meetingId);
             if (meeting == null)
             {
-                new Exception("Meeting not found");
+                throw new Exception("Meeting not found");
             }
 
             return meeting.Participants.Any(participant => participant.Id == userId);
@@ -185,7 +186,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             var meeting = await _meetingRepository.GetByIdAsync(meetingId);
             if (meeting == null)
             {
-                new Exception("Meeting not found");
+                throw new Exception("Meeting not found");
             }
 
             return meeting.OrganizerId == userId;
