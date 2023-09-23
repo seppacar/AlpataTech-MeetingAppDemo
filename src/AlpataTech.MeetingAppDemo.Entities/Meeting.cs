@@ -19,8 +19,8 @@ namespace AlpataTech.MeetingAppDemo.Entities
 
         public int OrganizerId { get; set; }
         public User Organizer { get; set; }
-        public List<MeetingParticipant> Participants { get; set; }
-        public List<MeetingDocument> Documents { get; set; }
+        public List<MeetingParticipant> Participants { get; set; } = new List<MeetingParticipant>();
+        public List<MeetingDocument> Documents { get; set; } = new List<MeetingDocument>();
 
     }
 }

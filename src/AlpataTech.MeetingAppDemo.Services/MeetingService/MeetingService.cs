@@ -26,7 +26,12 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         public async Task<MeetingDto> CreateMeetingAsync(CreateMeetingDto createMeetingDto)
         {
             var meeting = _mapper.Map<Meeting>(createMeetingDto);
+
             await _meetingRepository.AddAsync(meeting);
+            await _meetingRepository.SaveChangesAsync();
+            
+            meeting.Participants.Add(new MeetingParticipant { UserId = meeting.OrganizerId, MeetingId = meeting.Id });
+
             await _meetingRepository.SaveChangesAsync();
 
             return _mapper.Map<MeetingDto>(meeting);
