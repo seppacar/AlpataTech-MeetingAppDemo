@@ -26,6 +26,9 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
             modelBuilder.Entity<Meeting>()
                 .Navigation(m => m.Participants)
                 .AutoInclude();
+            modelBuilder.Entity<Meeting>()
+                .Navigation(m => m.Organizer)
+                .AutoInclude();
             modelBuilder.Entity<User>()
                 .Navigation(u => u.Roles)
                 .AutoInclude();

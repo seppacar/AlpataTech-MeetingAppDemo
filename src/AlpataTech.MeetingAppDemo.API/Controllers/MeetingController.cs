@@ -73,7 +73,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
             // Only allow if request maker user is organizer or is "Admin"
             if (await _meetingService.IsUserOrganizer(id, userId) || User.IsInRole("Admin"))
-            { 
+            {
                 var meeting = await _meetingService.UpdateMeetingAsync(id, updateMeetingDto);
                 return Ok();
             }

@@ -29,6 +29,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -103,7 +104,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
 
         // Retrieving user profilepicture here but maybe we could TODO: sent as base 64 with all details
         [HttpGet("{id}/profilePicture")]
-        //[Authorize(Roles = "User")]
+        [Authorize]
         public async Task<IActionResult> GetUserProfilePicture(int id)
         {
             byte[]? profilePictureBytes = await _userService.GetProfilePicture(id);
@@ -111,7 +112,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpGet("roles/{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetRoles(int id)
         {
             var roles = await _userService.GetUserRolesByIdAsync(id);
