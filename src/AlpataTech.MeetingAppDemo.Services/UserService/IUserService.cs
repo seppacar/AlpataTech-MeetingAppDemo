@@ -14,6 +14,7 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
         Task<IEnumerable<UserDto>> FindUsersAsync(Expression<Func<User, bool>> predicate);
         Task<UserDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto);
         Task DeleteUserAsync(int id);
+        Task AddUserRoleAsync(int userId, string roleName);
         Task<byte[]?> GetProfilePicture(int id);
     }
 }

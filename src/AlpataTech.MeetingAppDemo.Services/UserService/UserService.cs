@@ -10,12 +10,14 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
     public class UserService : IUserService
     {
         private readonly UserRepository _userRepository;
+        private readonly RoleRepository _roleRepository;
         private readonly IMapper _mapper;
         private readonly IFileStorageService _fileStorageService;
 
-        public UserService(UserRepository userRepository, IMapper mapper, IFileStorageService fileStorageService)
+        public UserService(UserRepository userRepository, RoleRepository roleRepository, IMapper mapper, IFileStorageService fileStorageService)
         {
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
             _mapper = mapper;
             _fileStorageService = fileStorageService;
         }
@@ -47,13 +49,31 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
                 user.ProfileImage = "Default Profile Image Path";
             }
 
+
             // Add the user asynchronously
             await _userRepository.AddAsync(user);
             // Save changes to the database
             await _userRepository.SaveChangesAsync();
 
+            // Get all roles from the database
+            var roles = await _roleRepository.GetAllAsync();
+            // Check if role already exists
+            var defaultRole = roles.FirstOrDefault(role => role.Name.ToUpperInvariant() == "USER");
+
+            if (defaultRole == null)
+            {
+                throw new Exception("User role is not in roles table");
+            }
+            // Add default UserRole for the created user
+            await _roleRepository.AddUserRoleAsync(user.Id, defaultRole.Id);
+            await _roleRepository.SaveChangesAsync();
             // Map the created user to UserDto and return
-            return _mapper.Map<UserDto>(user);
+            var createdUser = await _userRepository.GetByIdAsync(user.Id);
+
+            // TODO: TODO: TODO: Remove this nasty workaround (Its here because EF Core APIs AutoInclude() doesn't include "Role" navigation property for "UserRole" for some reason
+            createdUser.Roles[0].Role = defaultRole;
+
+            return _mapper.Map<UserDto>(createdUser);
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
@@ -129,6 +149,52 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             _userRepository.Remove(await _userRepository.GetByIdAsync(id));
             await _userRepository.SaveChangesAsync();
         }
+        public async Task AddUserRoleAsync(int userId, string roleName)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            // Normalize the role name
+            string normalizedRoleName = roleName.ToUpperInvariant();
+            // Get all roles from the database
+            var roles = await _roleRepository.GetAllAsync();
+            // Check if role already exists
+            var existingRole = roles.FirstOrDefault(role => role.Name.ToUpperInvariant() == normalizedRoleName);
+
+            // Create new UserRole for User if role exists, else create the role and assign it
+            if (existingRole == null)
+            {
+                user.Roles.Add(new UserRole
+                {
+                    RoleId = existingRole.Id
+                });
+            }
+            else
+            {
+                // Role doesn't exist, create it and assign to the user
+                var newRole = new Role
+                {
+                    Name = normalizedRoleName
+                };
+
+                // Add the role
+                await _roleRepository.AddAsync(newRole);
+                await _roleRepository.SaveChangesAsync();  // Save changes here
+
+                // Assign the new role to the user
+                user.Roles.Add(new UserRole
+                {
+                    RoleId = newRole.Id
+                });
+            }
+
+            // Save changes (including user and user role associations)
+            await _userRepository.SaveChangesAsync();
+        }
+
 
         public async Task<byte[]?> GetProfilePicture(int id)
         {

@@ -52,6 +52,7 @@ builder.Services.SetupDbContext(dbConnectionString);
 
 // Repositories
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<MeetingRepository>();
 builder.Services.AddScoped<MeetingDocumentRepository>();
 
