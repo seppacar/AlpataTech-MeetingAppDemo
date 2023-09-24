@@ -1,6 +1,7 @@
 using AlpataTech.MeetingAppDemo.DAL.Extensions;
 using AlpataTech.MeetingAppDemo.DAL.Repository;
 using AlpataTech.MeetingAppDemo.Services.AuthService;
+using AlpataTech.MeetingAppDemo.Services.Common.EmailService;
 using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
 using AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService;
 using AlpataTech.MeetingAppDemo.Services.Common.Mapper;
@@ -60,6 +61,7 @@ builder.Services.AddScoped<MeetingDocumentRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMeetingService, MeetingService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Storage Service
 var storageOption = builder.Configuration["FileStorageOptions:StorageType"];
