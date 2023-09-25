@@ -3,6 +3,7 @@ using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
 using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingDocument;
 using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingParticipant;
+using AlpataTech.MeetingAppDemo.Services.Common.EmailService;
 using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
 using AutoMapper;
 using System.Linq.Expressions;
@@ -13,13 +14,15 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
     {
         private readonly MeetingRepository _meetingRepository;
         private readonly MeetingDocumentRepository _meetingDocumentRepository;
+        private readonly IEmailService _emailService;
         private readonly IFileStorageService _fileStorageService;
         private readonly IMapper _mapper;
 
-        public MeetingService(MeetingRepository meetingRepository, MeetingDocumentRepository meetingDocumentRepository, IFileStorageService fileStorageService, IMapper mapper)
+        public MeetingService(MeetingRepository meetingRepository, MeetingDocumentRepository meetingDocumentRepository, IFileStorageService fileStorageService, IEmailService emailService,IMapper mapper)
         {
             _meetingRepository = meetingRepository;
             _meetingDocumentRepository = meetingDocumentRepository;
+            _emailService = emailService;
             _fileStorageService = fileStorageService;
             _mapper = mapper;
         }
@@ -27,14 +30,20 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         {
             var meeting = _mapper.Map<Meeting>(createMeetingDto);
 
-            await _meetingRepository.AddAsync(meeting);
-            await _meetingRepository.SaveChangesAsync();
-            
+            // Add organizer as participant
             meeting.Participants.Add(new MeetingParticipant { UserId = meeting.OrganizerId, MeetingId = meeting.Id });
 
+            // Save meeting to db
+            await _meetingRepository.AddAsync(meeting);
             await _meetingRepository.SaveChangesAsync();
 
-            return _mapper.Map<MeetingDto>(meeting);
+            // Get meeting with navigation
+            var meetingWithNavigations = await _meetingRepository.GetMeetingWithNavigationsAsync(meeting.Id);
+
+            // Send meeting created notification email to organizer
+            await _emailService.SendMeetingCreatedEmailAsync(meetingWithNavigations.Organizer.Email, _mapper.Map<MeetingDto>(meetingWithNavigations));
+
+            return _mapper.Map<MeetingDto>(meetingWithNavigations);
         }
 
         public async Task<IEnumerable<MeetingDto>> GetAllMeetingsAsync()
@@ -64,14 +73,14 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
                 return null;
             }
 
-            // Update the user properties with the values from updateUserDto
+            // Update the user properties with the values from updateMeetingDto
             _mapper.Map(updateMeetingDto, meetingToUpdate);
 
             // Update the user in the repository
             _meetingRepository.Update(meetingToUpdate);
             await _meetingRepository.SaveChangesAsync();
 
-            // Map and return the updated user
+            // Map and return the updated meeting
             return _mapper.Map<MeetingDto>(meetingToUpdate);
         }
 
@@ -93,12 +102,23 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             // Set meetingId for meetingParticipant object
             meetingParticipant.MeetingId = meetingId;
 
-            // Add participant
+            // Add participant and save
             meeting.Participants.Add(meetingParticipant);
-
             await _meetingRepository.SaveChangesAsync();
 
-            return _mapper.Map<MeetingDto>(meeting);
+            // Get Meeting with navigation properties included
+            var updatedMeeting =  await _meetingRepository.GetMeetingWithNavigationsAsync(meetingId);
+
+            // Get added participant
+            var participant = updatedMeeting.Participants.Find(p => p.UserId == meetingParticipant.UserId);
+
+            // Map Meeting to MeetingDto
+            var meetingDto = _mapper.Map<MeetingDto>(meeting);
+
+            // Send notification email to user who is added as participant
+            await _emailService.SendMeetingParticipationEmailAsync(participant.User.Email, meetingDto, participant);
+
+            return meetingDto;
         }
 
         public async Task<MeetingDocumentDto> AddMeetingDocumentAsync(int meetingId, FileUploadModel meetingDocumentUploadObject)

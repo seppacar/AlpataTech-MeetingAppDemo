@@ -3,11 +3,13 @@ using System.Net.Mail;
 using System.Net;
 using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
+using AlpataTech.MeetingAppDemo.Entities;
 
 namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
 {
     public class EmailService : IEmailService
     {
+        private readonly string appName = "AlpataTech Demo APP"; // TODO: initalize it using appsettings.json
         private readonly string smtpServer;
         private readonly int smtpPort;
         private readonly string smtpUsername;
@@ -56,21 +58,48 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
             string emailTemplate = ReadEmailTemplate("UserWelcome");
             string body = emailTemplate.Replace("{{FirstName}}", userDto.FirstName).Replace("{{LastName}}", userDto.LastName);
 
-            await SendEmailAsync(to,"Welcome to [App Name Here]", body);
+            await SendEmailAsync(to, $"Welcome to {appName}", body);
         }
-        public Task SendMeetingCreatedEmailAsync(string to, MeetingDto meetingDto)
+        public async Task SendMeetingCreatedEmailAsync(string to, MeetingDto meetingDto)
         {
-            throw new NotImplementedException();
+            string emailTemplate = ReadEmailTemplate("MeetingCreated");
+            string body = emailTemplate
+                .Replace("{{Title}}", meetingDto.Title)
+                .Replace("{{OrganizerName}}", meetingDto.Organizer.FirstName + " " + meetingDto.Organizer.LastName)
+                .Replace("{{Description}}", meetingDto.Description)
+                .Replace("{{StartTime}}", meetingDto.StartTime.ToString("yyyy-MM-dd HH:mm"))
+                .Replace("{{EndTime}}", meetingDto.EndTime.ToString("yyyy-MM-dd HH:mm"))
+                .Replace("{{AppName}}", appName);
+
+            await SendEmailAsync(to, $"Your meeting titled {meetingDto.Title} has been successfully created - {appName}", body);
         }
 
-        public Task SendMeetingParticipationEmailAsync(string to, string subject, string body)
+        public async Task SendMeetingParticipationEmailAsync(string to, MeetingDto meetingDto, MeetingParticipant meetingParticipant)
         {
-            throw new NotImplementedException();
+            string emailTemplate = ReadEmailTemplate("MeetingParticipation");
+            string body = emailTemplate
+                .Replace("{{Title}}", meetingDto.Title)
+                .Replace("{{ParticipantName}}", meetingParticipant.User.FirstName + " " + meetingParticipant.User.LastName)
+                .Replace("{{Description}}", meetingDto.Description)
+                .Replace("{{StartTime}}", meetingDto.StartTime.ToString("yyyy-MM-dd HH:mm"))
+                .Replace("{{EndTime}}", meetingDto.EndTime.ToString("yyyy-MM-dd HH:mm"))
+                .Replace("{{AppName}}", appName);
+
+            await SendEmailAsync(to, $"You've been added as a participant in a meeting - {appName}", body);
         }
 
-        public Task SendMeetingNotificationAsync(string to, string subject, string body)
+        public async Task SendMeetingNotificationAsync(string to, MeetingDto meetingDto, MeetingParticipant meetingParticipant)
         {
-            throw new NotImplementedException();
+            string emailTemplate = ReadEmailTemplate("MeetingNotification");
+
+            string body = emailTemplate
+                .Replace("{{Title}}", meetingDto.Title)
+                .Replace("{{ParticipantName}}", meetingDto.Organizer.FirstName + " " + meetingDto.Organizer.LastName)
+                .Replace("{{StartTime}}", meetingDto.StartTime.ToString("yyyy-MM-dd HH:mm"))
+                .Replace("{{EndTime}}", meetingDto.EndTime.ToString("yyyy-MM-dd HH:mm"))
+                .Replace("{{AppName}}", appName);
+
+            await SendEmailAsync(to, "Welcome to [App Name Here]", body);
         }
     }
 }

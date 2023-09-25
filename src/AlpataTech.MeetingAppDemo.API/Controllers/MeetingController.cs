@@ -52,7 +52,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreateMeeting([FromBody] CreateMeetingDto createMeetingDto)
         {
             // Extract "sub" from JWT (which is userId) and convert to int

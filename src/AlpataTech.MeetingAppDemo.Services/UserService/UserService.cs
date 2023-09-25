@@ -1,6 +1,7 @@
 ﻿using AlpataTech.MeetingAppDemo.DAL.Repository;
 using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.User;
+using AlpataTech.MeetingAppDemo.Services.Common.EmailService;
 using AlpataTech.MeetingAppDemo.Services.Common.FileStorageService;
 using AutoMapper;
 using System.Linq.Expressions;
@@ -11,15 +12,17 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
     {
         private readonly UserRepository _userRepository;
         private readonly RoleRepository _roleRepository;
-        private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
         private readonly IFileStorageService _fileStorageService;
+        private readonly IMapper _mapper;
 
-        public UserService(UserRepository userRepository, RoleRepository roleRepository, IMapper mapper, IFileStorageService fileStorageService)
+        public UserService(UserRepository userRepository, RoleRepository roleRepository, IFileStorageService fileStorageService, IEmailService emailService, IMapper mapper)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
-            _mapper = mapper;
             _fileStorageService = fileStorageService;
+            _emailService = emailService;
+            _mapper = mapper;
         }
 
         public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto, FileUploadModel? profilePictureFile)
@@ -67,13 +70,17 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             // Add default UserRole for the created user
             await _roleRepository.AddUserRoleAsync(user.Id, defaultRole.Id);
             await _roleRepository.SaveChangesAsync();
+
             // Map the created user to UserDto and return
-            var createdUser = await _userRepository.GetByIdAsync(user.Id);
+            var createdUser = await _userRepository.GetUserWithNavigationsAsync(user.Id);
 
-            // TODO: TODO: TODO: Remove this nasty workaround (Its here because EF Core APIs AutoInclude() doesn't include "Role" navigation property for "UserRole" for some reason
-            createdUser.Roles[0].Role = defaultRole;
+            // Map User createdUser to UserDto userDto
+            var userDto = _mapper.Map<UserDto>(createdUser);
 
-            return _mapper.Map<UserDto>(createdUser);
+            // Send welcome email to created user
+            await _emailService.SendWelcomeEmailAsync(createdUser.Email, userDto);
+
+            return userDto;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
