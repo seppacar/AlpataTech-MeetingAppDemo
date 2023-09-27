@@ -18,7 +18,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         private readonly IFileStorageService _fileStorageService;
         private readonly IMapper _mapper;
 
-        public MeetingService(MeetingRepository meetingRepository, MeetingDocumentRepository meetingDocumentRepository, IFileStorageService fileStorageService, IEmailService emailService,IMapper mapper)
+        public MeetingService(MeetingRepository meetingRepository, MeetingDocumentRepository meetingDocumentRepository, IFileStorageService fileStorageService, IEmailService emailService, IMapper mapper)
         {
             _meetingRepository = meetingRepository;
             _meetingDocumentRepository = meetingDocumentRepository;
@@ -107,7 +107,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             await _meetingRepository.SaveChangesAsync();
 
             // Get Meeting with navigation properties included
-            var updatedMeeting =  await _meetingRepository.GetMeetingWithNavigationsAsync(meetingId);
+            var updatedMeeting = await _meetingRepository.GetMeetingWithNavigationsAsync(meetingId);
 
             // Get added participant
             var participant = updatedMeeting.Participants.Find(p => p.UserId == meetingParticipant.UserId);

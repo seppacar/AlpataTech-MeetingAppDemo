@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Net.Mail;
-using System.Net;
-using AlpataTech.MeetingAppDemo.Entities.DTO.User;
+﻿using AlpataTech.MeetingAppDemo.Entities;
 using AlpataTech.MeetingAppDemo.Entities.DTO.Meeting;
-using AlpataTech.MeetingAppDemo.Entities;
+using AlpataTech.MeetingAppDemo.Entities.DTO.User;
+using Microsoft.Extensions.Configuration;
+using System.Net;
+using System.Net.Mail;
 
 namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
 {
@@ -15,7 +15,7 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
         private readonly string smtpUsername;
         private readonly string smtpPassword;
         private readonly IConfiguration _configuration;
-        
+
         public EmailService(IConfiguration configuration)
         {
             _configuration = configuration;

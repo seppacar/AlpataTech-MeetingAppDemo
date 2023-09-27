@@ -3,7 +3,6 @@ using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.AuthService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
 {
@@ -57,7 +56,8 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             // Call service to create the user
             var userDto = await _userService.CreateUserAsync(createUserDto, profilePictureFile);
 
-            var userAuthDto = new UserAuthDto {
+            var userAuthDto = new UserAuthDto
+            {
                 Email = createUserDto.Email,
                 Password = createUserDto.Password
             };

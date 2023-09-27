@@ -9,7 +9,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Repository
         public RoleRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
-        public async Task  AddUserRoleAsync(int userId, int roleId)
+        public async Task AddUserRoleAsync(int userId, int roleId)
         {
             await _dbContext.UserRole.AddAsync(new UserRole
             {

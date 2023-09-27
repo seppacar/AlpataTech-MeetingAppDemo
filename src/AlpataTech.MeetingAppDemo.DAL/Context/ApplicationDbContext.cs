@@ -29,7 +29,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
                 .AutoInclude();
             modelBuilder.Entity<Meeting>()
                 .Navigation(m => m.Organizer)
-                .AutoInclude(); 
+                .AutoInclude();
             modelBuilder.Entity<User>()
                 .Navigation(u => u.Roles)
                 .AutoInclude();
@@ -49,7 +49,7 @@ namespace AlpataTech.MeetingAppDemo.DAL.Context
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<UserRole> UserRole {  get; set; }
+        public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<MeetingParticipant> MeetingParticipants { get; set; }
         public DbSet<MeetingDocument> MeetingDocuments { get; set; }
