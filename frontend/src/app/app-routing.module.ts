@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/auth/login/login/login.component';
-import { RegisterComponent } from './pages/auth/register/register/register.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
 import { CreateMeetingComponent } from './pages/create-meeting/create-meeting.component';
 
 const routes: Routes = [

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { UserRegistration } from '../../../../core/models/user/user-registration.model';
-import { AuthService } from '../../../../core/services/auth/auth.service';
-import { StorageService } from '../../../../core/services/storage/storage.service';
+import { UserRegistration } from '../../../core/models/user/user-registration.model';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { StorageService } from '../../../core/services/storage/storage.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
 
+  /* TODO: Set default profile image */
   profilePictureURL = null
   userRegistrationObject = new UserRegistration();
 
