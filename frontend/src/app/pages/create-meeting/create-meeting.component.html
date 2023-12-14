@@ -1,0 +1,66 @@
+<div class="container-fluid create-meeting-component">
+    <div class="row">
+        <div class="col-lg-6 right">
+            <h3>Meeting details</h3>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="meetingTitle" placeholder="Title">
+                <label for="floatingInput">Title</label>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea type="text" class="form-control" id="meetingDescription" placeholder="Description"></textarea>
+                <label for="floatingPassword">Description</label>
+            </div>
+            <div class="container-fluid" style="padding: 0">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="datetime-local" class="form-control" id="meetingDate"
+                                placeholder="Description" />
+                            <label for="floatingPassword">Meeting Start</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <textarea type="text" class="form-control" id="meetingDescription"
+                                placeholder="Description"></textarea>
+                            <label for="floatingPassword">Meeting Duration</label>
+                        </div>
+                    </div>
+                    <h3>Documents</h3>
+                    <input type="file" (change)="onFileSelected($event)" #fileInput style="display: none" />
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <button class="btn btn-md secondary-button" (click)="fileInput.click()">
+                                Add Files
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li *ngFor="let file of selectedFiles">
+                                <span>{{ file.name }}</span>
+                                <button (click)="removeFile(file)">X</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 left">
+            <h3>Participants</h3>
+            <ng-select [multiple]="true" [(ngModel)]="selectedCars">
+                <ng-option *ngFor="let car of cars" [value]="car.id" [disabled]="car.disabled">
+                    <img src="https://placehold.co/30x30">
+                    {{car.name}}
+                </ng-option>
+                <ng-option [value]="'custom'">Custom</ng-option>
+            </ng-select>
+            <br />Selected car ID: {{selectedCars | json}}
+        </div>
+        <div class="create-meeting-button col-lg-12">
+            <div class="row justify-content-end">
+                <button class="btn btn-lg primary-button">Create Meeting</button>
+            </div>
+        </div>
+    </div>
+</div>

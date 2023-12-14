@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 register-page-hero ">
+            <img src="https://placehold.co/600x400">
+        </div>
+        <div class="col-lg-5 register-page-form">
+            <div class="mb-3">
+                <span>
+                    Welcome! Please sign up to continue.
+                </span>
+            </div>
+            <form (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="profilePicture">Profile Picture</label>
+                    <div class="row align-items-end" style="border: 1px solid red;">
+                        <div class="col-4">
+                            <img src={{profilePictureURL}} width="150px" height="150px">
+                        </div>
+                        <div class="col-8">
+                            <input class="form-control" type="file" id="profilePicture" name="profilePicture"
+                                (change)="handleProfilePictureChange($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="firstName" name="firstName"
+                        [(ngModel)]="userRegistrationObject.firstName" placeholder="John">
+                    <label for="floatingInput">First name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="lastName" name="lastName"
+                        [(ngModel)]="userRegistrationObject.lastName" placeholder="Doe">
+                    <label for="floatingInput">Last name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" name="email"
+                        [(ngModel)]="userRegistrationObject.email" placeholder="name@example.com">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber"
+                        [(ngModel)]="userRegistrationObject.phoneNumber" placeholder="name@example.com">
+                    <label for="floatingInput">Phone number</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" name="lastName"
+                        [(ngModel)]="userRegistrationObject.password" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="register-button mb-3">
+                    <button type="submit" class="btn primary-button btn-lg">Sign Up</button>
+                </div>
+            </form>
+            <div class="register-suggestion">
+                <span>Already have an account? <a routerLink="/sign-in">Login Now!</a></span>
+            </div>
+        </div>
+    </div>
+</div>

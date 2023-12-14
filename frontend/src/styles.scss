@@ -1,0 +1,70 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@ng-select/ng-select/themes/material.theme.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* Global Color Theme */
+$primary-color: #FF5F00;
+$primary-color-hover: #FF7954;
+$secondary-color: #88543C;
+$tertiary-color: #FFE7D3;
+$accent-color: #005246;
+
+:root {
+    --primary-color: $primary-color;
+    --secondary-color: $secondary-color;
+    --tertiary-color: $tertiary-color;
+    --accent-color: $accent-color;
+}
+
+body {
+    font-family: 'Montserrat';
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+a {
+    color: $primary-color;
+    transition: all ease 0.3s;
+
+    &:hover {
+        color: $accent-color;
+    }
+}
+
+.primary-button {
+    transition: all ease 0.3s;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: $primary-color;
+    color: $tertiary-color;
+
+    &:hover {
+        color: $tertiary-color;
+        background-color: $primary-color-hover;
+    }
+}
+
+.secondary-button {
+    transition: all ease 0.3s;
+    background-color: $accent-color;
+    color: $tertiary-color;
+
+    &:hover {
+        color: $tertiary-color;
+        background-color: $primary-color-hover;
+    }
+}

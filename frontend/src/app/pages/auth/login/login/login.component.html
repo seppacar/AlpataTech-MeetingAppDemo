@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 login-page-hero ">
+            <img src="https://placehold.co/600x400">
+        </div>
+        <div class="col-lg-5 login-page-form">
+            <div class="mb-3">
+                <span>
+                    Welcome! Please sign in to continue.
+                </span>
+            </div>
+            <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" name="email" [(ngModel)]="userAuthObject.email" placeholder="name@example.com">
+                    <label for="email">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" name="password" [(ngModel)]="userAuthObject.password" placeholder="Password">
+                    <label for="password">Password</label>
+                </div>
+                <div class="forgot-password mb-3">
+                    <a routerLink="/forgot-password">
+                        Forgot password?
+                    </a>
+                </div>
+                <div class="login-button mb-3">
+                    <button type="submit" class="btn primary-button btn-lg">Sign in</button>
+                </div>
+                <div class="register-suggestion">
+                    <span >Don't have an account? <a routerLink="/sign-up">Register Now!</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
