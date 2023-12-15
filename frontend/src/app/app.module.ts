@@ -14,6 +14,8 @@ import { CreateMeetingComponent } from './pages/create-meeting/create-meeting.co
 import { MeetingDetailsComponent } from './pages/meeting-details/meeting-details.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { DemoComponent } from './pages/demo/demo.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     HomeComponent,
     CreateMeetingComponent,
     MeetingDetailsComponent,
+    DashboardComponent,
+    DemoComponent,
   ],
   imports: [
     BrowserModule,

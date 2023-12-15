@@ -14,12 +14,22 @@
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
                   </li>
-                  <li class="nav-item auth-group">
-                    <a class="nav-link" routerLink="sign-in">Sign in</a>
-                  </li>
-                  <li class="nav-item auth-group">
-                    <a class="nav-link" routerLink="sign-up">Sign up</a>
-                  </li>
+                  <ng-container *ngIf="!currentUser">
+                    <li class="nav-item auth-group">
+                      <a class="nav-link" routerLink="sign-in">Sign in</a>
+                    </li>
+                    <li class="nav-item auth-group">
+                      <a class="nav-link" routerLink="sign-up">Sign up</a>
+                    </li>
+                  </ng-container>
+                  <ng-container *ngIf="currentUser">
+                    <li class="nav-item auth-group">
+                      <a class="nav-link" routerLink="dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item auth-group">
+                      <a class="nav-link" style="cursor: pointer;" (click)="logout()">Logout</a>
+                    </li>
+                  </ng-container>
                 </ul>
               </div>
             </div>

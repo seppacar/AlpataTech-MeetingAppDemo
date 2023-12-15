@@ -20,12 +20,12 @@ export class RegisterComponent {
   }
 
   handleProfilePictureChange(event: Event) {
-    let fileReader = new FileReader()
+    const fileReader = new FileReader()
     const element = event.currentTarget as HTMLInputElement;
-    let selectedFiles: FileList | null = element.files;
+    const selectedFiles: FileList | null = element.files;
     if (selectedFiles && selectedFiles.length > 0) {
-      let currentPicture = selectedFiles[0]
-      
+      const currentPicture = selectedFiles[0]
+
       fileReader.onload = (e: any) => {
         // Set preview
         this.profilePictureURL = e.target.result
@@ -40,9 +40,10 @@ export class RegisterComponent {
   onSubmit() {
     this.authService.register(this.userRegistrationObject)
       .subscribe(
-        (response) => {
-          this.storageService.setToken(response.token)
-          this.router.navigate(['/'])
+        {
+          complete: () => {
+            this.router.navigateByUrl('/dashboard')
+          }
         }
       )
   }

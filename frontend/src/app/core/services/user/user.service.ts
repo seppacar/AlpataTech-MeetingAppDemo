@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../models/user/user.model';
 
 
-const baseUrl = 'https://localhost:7228/api/users';
+const baseUrl = 'http://localhost:5228/api/users';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +35,10 @@ export class UserService {
 
   getProfilePicture(id: number): Observable<any> {
     return this.http.get(`${baseUrl}/${id}/profilePicture`)
+  }
+
+  getUserDetailsWithToken(): Observable<User>{
+    console.log("USERSERV")
+    return this.http.get<User>(`${baseUrl}/getUserDetails`)
   }
 }
