@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { HeaderComponent } from './core/layout/header/header.component';
-import { LoginComponent } from './pages/auth/login/login/login.component';
+import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
 import { FormsModule } from '@angular/forms';

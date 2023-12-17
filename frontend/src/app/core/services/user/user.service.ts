@@ -33,8 +33,8 @@ export class UserService {
     return this.http.delete(`${baseUrl}/${id}`);
   }
 
-  getProfilePicture(id: number): Observable<any> {
-    return this.http.get(`${baseUrl}/${id}/profilePicture`)
+  getProfilePicture(id: number): Observable<Blob> {
+    return this.http.get(`${baseUrl}/${id}/profilePicture`, { responseType: 'blob' });
   }
 
   getUserDetailsWithToken(): Observable<User>{

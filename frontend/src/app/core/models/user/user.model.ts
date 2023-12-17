@@ -4,7 +4,7 @@ export class User {
     lastName: string;
     email: string;
     phoneNumber: string;
-    profileImage: string;
+    profileImageUrl: string;
     roles: string[];
   
     constructor(data: any) {
@@ -13,7 +13,7 @@ export class User {
       this.lastName = data.lastName;
       this.email = data.email;
       this.phoneNumber = data.phoneNumber;
-      this.profileImage = data.profileImage;
+      this.profileImageUrl = data.profileImageUrl;
       this.roles = data.roles || [];
     }
   }

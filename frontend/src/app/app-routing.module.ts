@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/auth/login/login/login.component';
+import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { CreateMeetingComponent } from './pages/create-meeting/create-meeting.component';
 import { authGuard } from './core/guards/auth.guard';
 import { DemoComponent } from './pages/demo/demo.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { MeetingDetailsComponent } from './pages/meeting-details/meeting-details.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,11 @@ const routes: Routes = [
     path: "organize-meeting",
     component: CreateMeetingComponent,
     canActivate: [authGuard], // Apply AuthGuard to protect the route
+  },
+  {
+    path: "meeting-details/:id",
+    component: MeetingDetailsComponent,
+    canActivate: [authGuard]
   }
 ];
 
