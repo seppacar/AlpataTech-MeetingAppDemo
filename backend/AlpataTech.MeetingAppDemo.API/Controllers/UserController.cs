@@ -3,6 +3,7 @@ using AlpataTech.MeetingAppDemo.Entities.DTO.User;
 using AlpataTech.MeetingAppDemo.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
 {
@@ -117,6 +118,25 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         {
             var roles = await _userService.GetUserRolesByIdAsync(id);
             return Ok(roles);
+        }
+
+        [HttpGet("getUserDetails")]
+        [Authorize]
+        public async Task<IActionResult> GetUserDetails()
+        {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var user = await _userService.GetUserByIdAsync(userId);
+
+            if (user == null || userId == null)
+            {
+                // User not found
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         // TODO: Change password
