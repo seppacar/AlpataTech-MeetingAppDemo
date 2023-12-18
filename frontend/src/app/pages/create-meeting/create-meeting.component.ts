@@ -109,41 +109,35 @@ export class CreateMeetingComponent {
 
     // Create meeting
     this.meetingService.create(this.newMeeting)
-      .pipe(
-        finalize(() => {
-          this.isLoading = false
-          this.uiService.hideSpinner()
-          this.router.navigateByUrl("/dashboard")
-        })
-      )
       .subscribe({
         next: (meeting) => { createdMeetingId = meeting.id },
-        error: (error) => { console.error(error) },
+        error: (error) => {
+          console.error(error)
+          this.uiService.hideSpinner()
+        },
         complete: () => {
-          this.selectedParticipants.forEach((participant) => {
-            // Add participants
-            this.meetingService.addMeetingParticipant(createdMeetingId, new MeetingParticipant({ userId: participant })).
-              subscribe(
-                {
-                  error: (error) => {
-                    // TODO: Handle error here, destroy meeting if adding participants failed?
-                    console.error(error)
-                  }
-                }
-              )
-          },
-            // Add documents
-            this.selectedDocuments.forEach((document) => {
-              this.meetingService.addMeetingDocument(createdMeetingId, document)
-                .subscribe(
-                  {
-                    error: (error) => { console.error(error) }
-                  }
-                )
-            })
-          )
-        }
-      })
+          const addParticipantObservables = this.selectedParticipants.map((participant) => {
+            return this.meetingService.addMeetingParticipant(createdMeetingId, new MeetingParticipant({ userId: participant }));
+          });
 
+          const addDocumentObservables = this.selectedDocuments.map((document) => {
+            return this.meetingService.addMeetingDocument(createdMeetingId, document);
+          });
+
+          // Combine all observables using forkJoin
+          forkJoin([...addParticipantObservables, ...addDocumentObservables])
+            .pipe(finalize(() => {
+              this.isLoading = false;
+              this.uiService.hideSpinner()
+              this.router.navigateByUrl(`/meeting-details/${createdMeetingId}`)
+            }))
+            .subscribe({
+              error: (error) => {
+                // TODO: Handle error here, destroy meeting if adding participants or documents failed?
+                console.error(error);
+              },
+            });
+        }
+      });
   }
 }
