@@ -4,6 +4,7 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { PageService } from '../../../core/services/page/page.service';
 import { UIService } from '../../../core/services/ui/ui.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,7 @@ export class RegisterComponent {
 
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.pageService.setPageInfo('Sign up', 'Lorem ipsum dolor sit amet')
   }
 
@@ -45,10 +46,12 @@ export class RegisterComponent {
   onSubmit() {
     this.uiService.showSpinner()
     this.authService.register(this.userRegistrationObject)
+      .pipe(finalize(() => {
+        this.uiService.hideSpinner()
+      }))
       .subscribe(
         {
           complete: () => {
-            this.uiService.hideSpinner()
             this.router.navigateByUrl('/dashboard')
           }
         }

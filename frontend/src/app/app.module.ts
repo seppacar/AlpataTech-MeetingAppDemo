@@ -18,6 +18,8 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DemoComponent } from './pages/demo/demo.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ToastrModule } from 'ngx-toastr';
+import { HttpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 
 @NgModule({
   declarations: [
@@ -40,11 +42,20 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     FormsModule,
     NgSelectModule,
     NgxSpinnerModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: "toast-top-full-width"
+    })
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
       multi: true
     }
   ],

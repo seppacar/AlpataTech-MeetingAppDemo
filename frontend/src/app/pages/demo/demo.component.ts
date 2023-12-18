@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { UserService } from '../../core/services/user/user.service';
-import { UIService } from '../../core/services/ui/ui.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-demo',
@@ -9,8 +8,8 @@ import { UIService } from '../../core/services/ui/ui.service';
 })
 export class DemoComponent {
 
-  constructor(private uiService: UIService){}
+  constructor(private toastr: ToastrService){}
   ngOnInit(){
-    this.uiService.showSpinner()
+    this.toastr.error('Hello world!', 'Toastr fun!');
   }
 }

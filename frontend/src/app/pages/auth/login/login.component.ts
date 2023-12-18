@@ -37,7 +37,7 @@ export class LoginComponent {
         },
         error: (error) => {
           this.uiService.hideSpinner()
-          console.error("Error logging in:", error.error.error);
+          console.error("Error logging in:", error.error.message);
         },
         complete: () => {
           this.router.navigateByUrl('/dashboard')
