@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../core/services/user/user.service';
+import { UIService } from '../../core/services/ui/ui.service';
 
 @Component({
   selector: 'app-demo',
@@ -8,10 +9,8 @@ import { UserService } from '../../core/services/user/user.service';
 })
 export class DemoComponent {
 
-  constructor(private userService: UserService){}
-
-  getProfilePicture(){
-    const profilePicture = this.userService.getProfilePicture(1)
-    console.log(profilePicture)
+  constructor(private uiService: UIService){}
+  ngOnInit(){
+    this.uiService.showSpinner()
   }
 }

@@ -7,6 +7,8 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { Meeting } from '../../core/models/meeting/meeting.model';
 import { MeetingParticipant } from '../../core/models/meeting/meeting-participant.model';
 import { MeetingService } from '../../core/services/meeting/meeting.service';
+import { UIService } from '../../core/services/ui/ui.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-meeting',
@@ -27,7 +29,7 @@ export class CreateMeetingComponent {
   selectedDocuments: File[] = [];
   selectedParticipants = [];
 
-  constructor(private pageService: PageService, private userService: UserService, private authService: AuthService, private meetingService: MeetingService) { }
+  constructor(private pageService: PageService, private uiService: UIService, private router: Router, private userService: UserService, private authService: AuthService, private meetingService: MeetingService) { }
 
   ngOnInit(): void {
     this.fetchUsers()
@@ -94,7 +96,8 @@ export class CreateMeetingComponent {
   }
 
   createMeeting() {
-    // 
+    this.uiService.showSpinner()
+
     let createdMeetingId = -1
     const startTimeString = this.newMeeting.startTime;
     const startTime = new Date(startTimeString);
@@ -109,7 +112,8 @@ export class CreateMeetingComponent {
       .pipe(
         finalize(() => {
           this.isLoading = false
-          console.log("Meeting created successfully")
+          this.uiService.hideSpinner()
+          this.router.navigateByUrl("/dashboard")
         })
       )
       .subscribe({

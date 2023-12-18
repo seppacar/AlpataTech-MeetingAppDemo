@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { UserRegistration } from '../../../core/models/user/user-registration.model';
 import { AuthService } from '../../../core/services/auth/auth.service';
-import { StorageService } from '../../../core/services/storage/storage.service';
 import { Router } from '@angular/router';
 import { PageService } from '../../../core/services/page/page.service';
+import { UIService } from '../../../core/services/ui/ui.service';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +16,7 @@ export class RegisterComponent {
   profilePictureURL = null
   userRegistrationObject = new UserRegistration({});
 
-  constructor(private authService: AuthService, private storageService: StorageService, private pageService: PageService, private router: Router) {
+  constructor(private authService: AuthService, private uiService: UIService, private pageService: PageService, private router: Router) {
 
   }
 
@@ -43,10 +43,12 @@ export class RegisterComponent {
   }
 
   onSubmit() {
+    this.uiService.showSpinner()
     this.authService.register(this.userRegistrationObject)
       .subscribe(
         {
           complete: () => {
+            this.uiService.hideSpinner()
             this.router.navigateByUrl('/dashboard')
           }
         }
