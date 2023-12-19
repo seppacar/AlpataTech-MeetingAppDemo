@@ -14,14 +14,16 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
         private readonly RoleRepository _roleRepository;
         private readonly IEmailService _emailService;
         private readonly IFileStorageService _fileStorageService;
+        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
 
-        public UserService(UserRepository userRepository, RoleRepository roleRepository, IFileStorageService fileStorageService, IEmailService emailService, IMapper mapper)
+        public UserService(UserRepository userRepository, RoleRepository roleRepository, IFileStorageService fileStorageService, IEmailService emailService, IImageService imageService, IMapper mapper)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _fileStorageService = fileStorageService;
             _emailService = emailService;
+            _imageService = imageService;
             _mapper = mapper;
         }
 
@@ -38,11 +40,13 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             if (profilePictureFile.FileData != null)
             {
                 // Adjust the directory and file name as needed
-                string fileName = "pfp_" + Guid.NewGuid().ToString() + profilePictureFile.FileExtension;
-                //string filePath = await _fileStorageService.UploadFileAsync(profilePictureBytes, fileName);
+                string fileName = "pfp_" + Guid.NewGuid().ToString() + ".webp";
+
+                // Convert and compress image file
+                var compressedImage = _imageService.CompressAndConvertWebP(profilePictureFile.FileData);
 
                 // Call the service to upload the file
-                _fileStorageService.UploadFileAsync(profilePictureFile.FileData, fileName);
+                _fileStorageService.UploadFileAsync(compressedImage, fileName);
 
                 // Store JUST filename since we are using one folder for all files for now
                 user.ProfileImage = fileName;

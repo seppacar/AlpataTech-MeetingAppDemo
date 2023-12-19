@@ -7,12 +7,20 @@ using AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService;
 using AlpataTech.MeetingAppDemo.Services.Common.Mapper;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using AlpataTech.MeetingAppDemo.Services.UserService;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Enable gzip compression
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true; // Enable compression for HTTPS connections
+    options.Providers.Add<GzipCompressionProvider>(); // Enable Gzip compression
+});
 
 // Add services to the container.
 
@@ -63,6 +71,7 @@ builder.Services.AddScoped<IMeetingService, MeetingService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+builder.Services.AddScoped<IImageService, ImageService>();
 // Storage Service
 var storageOption = builder.Configuration["FileStorageOptions:StorageType"];
 
