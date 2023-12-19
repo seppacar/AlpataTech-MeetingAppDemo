@@ -1,51 +1,40 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.7.34024.191
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.API", "AlpataTech.MeetingAppDemo.API\AlpataTech.MeetingAppDemo.API.csproj", "{56545027-9B97-49A0-BDE4-56E4D3D46AA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.API", "AlpataTech.MeetingAppDemo.API\AlpataTech.MeetingAppDemo.API.csproj", "{E6B09281-69FF-4E7A-88F3-8DC7E7C7CBC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.Entities", "AlpataTech.MeetingAppDemo.Entities\AlpataTech.MeetingAppDemo.Entities.csproj", "{09BBD23D-BB8C-4B89-B9D1-542A13C20A92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.DAL", "AlpataTech.MeetingAppDemo.DAL\AlpataTech.MeetingAppDemo.DAL.csproj", "{F89D3700-E8E4-4BFC-BB41-41BDBFDEE1E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.Services", "AlpataTech.MeetingAppDemo.Services\AlpataTech.MeetingAppDemo.Services.csproj", "{62CA21DE-830F-4310-91ED-41ADD270E6EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.Entities", "AlpataTech.MeetingAppDemo.Entities\AlpataTech.MeetingAppDemo.Entities.csproj", "{0A220BE8-A39D-4C42-B211-57FCC2A50375}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlpataTech.MeetingAppDemo.DAL", "AlpataTech.MeetingAppDemo.DAL\AlpataTech.MeetingAppDemo.DAL.csproj", "{7288EB46-8019-4E8E-B6B9-AF37E10C0806}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{219440C1-DA20-4BBA-97B7-0CF304E66970}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlpataTech.MeetingAppDemo.Services", "AlpataTech.MeetingAppDemo.Services\AlpataTech.MeetingAppDemo.Services.csproj", "{F2181538-4931-40DF-9B76-CA1CE68D3484}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{56545027-9B97-49A0-BDE4-56E4D3D46AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56545027-9B97-49A0-BDE4-56E4D3D46AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56545027-9B97-49A0-BDE4-56E4D3D46AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56545027-9B97-49A0-BDE4-56E4D3D46AA2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09BBD23D-BB8C-4B89-B9D1-542A13C20A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09BBD23D-BB8C-4B89-B9D1-542A13C20A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09BBD23D-BB8C-4B89-B9D1-542A13C20A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09BBD23D-BB8C-4B89-B9D1-542A13C20A92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{62CA21DE-830F-4310-91ED-41ADD270E6EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62CA21DE-830F-4310-91ED-41ADD270E6EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62CA21DE-830F-4310-91ED-41ADD270E6EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62CA21DE-830F-4310-91ED-41ADD270E6EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7288EB46-8019-4E8E-B6B9-AF37E10C0806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7288EB46-8019-4E8E-B6B9-AF37E10C0806}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7288EB46-8019-4E8E-B6B9-AF37E10C0806}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7288EB46-8019-4E8E-B6B9-AF37E10C0806}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{56545027-9B97-49A0-BDE4-56E4D3D46AA2} = {219440C1-DA20-4BBA-97B7-0CF304E66970}
-		{09BBD23D-BB8C-4B89-B9D1-542A13C20A92} = {219440C1-DA20-4BBA-97B7-0CF304E66970}
-		{62CA21DE-830F-4310-91ED-41ADD270E6EC} = {219440C1-DA20-4BBA-97B7-0CF304E66970}
-		{7288EB46-8019-4E8E-B6B9-AF37E10C0806} = {219440C1-DA20-4BBA-97B7-0CF304E66970}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {87760C2C-1BDE-4BD6-9A2A-BD6E1A24953C}
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6B09281-69FF-4E7A-88F3-8DC7E7C7CBC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B09281-69FF-4E7A-88F3-8DC7E7C7CBC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B09281-69FF-4E7A-88F3-8DC7E7C7CBC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B09281-69FF-4E7A-88F3-8DC7E7C7CBC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F89D3700-E8E4-4BFC-BB41-41BDBFDEE1E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F89D3700-E8E4-4BFC-BB41-41BDBFDEE1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F89D3700-E8E4-4BFC-BB41-41BDBFDEE1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F89D3700-E8E4-4BFC-BB41-41BDBFDEE1E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A220BE8-A39D-4C42-B211-57FCC2A50375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A220BE8-A39D-4C42-B211-57FCC2A50375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A220BE8-A39D-4C42-B211-57FCC2A50375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A220BE8-A39D-4C42-B211-57FCC2A50375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2181538-4931-40DF-9B76-CA1CE68D3484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2181538-4931-40DF-9B76-CA1CE68D3484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2181538-4931-40DF-9B76-CA1CE68D3484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2181538-4931-40DF-9B76-CA1CE68D3484}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
