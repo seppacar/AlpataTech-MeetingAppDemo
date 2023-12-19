@@ -52,7 +52,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CreateMeeting([FromBody] CreateMeetingDto createMeetingDto)
         {
             // Extract "sub" from JWT (which is userId) and convert to int
@@ -75,18 +75,16 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             if (await _meetingService.IsUserOrganizer(id, userId) || User.IsInRole("Admin"))
             {
                 var meeting = await _meetingService.UpdateMeetingAsync(id, updateMeetingDto);
-                return Ok();
+                return Ok(meeting);
             }
             else
             {
                 return Forbid();
             }
-
         }
 
         [HttpDelete]
         [Authorize]
-        // TODO: Authorize Organizer and Admin
         public async Task<IActionResult> DeleteMeeting(int id)
         {
             // Extract "sub" from JWT (which is userId) and convert to int
@@ -115,6 +113,25 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             if (await _meetingService.IsUserOrganizer(id, userId) || User.IsInRole("Admin"))
             {
                 return Ok(await _meetingService.AddMeetingParticipantAsync(id, createMeetingParticipantDto));
+            }
+            else
+            {
+                return Forbid();
+            }
+        }
+
+        [HttpDelete("{meetingId}/participants/{participantUserId}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveMeetingParticipant(int meetingId, int participantUserId)
+        {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Only allow if request maker user is organizer or is "Admin"
+            if ((await _meetingService.IsUserOrganizer(meetingId, userId) || User.IsInRole("Admin")) && userId != participantUserId)
+            {
+                await _meetingService.RemoveMeetingParticipantAsync(meetingId, participantUserId);
+                return NoContent();
             }
             else
             {

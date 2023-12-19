@@ -37,13 +37,21 @@ export class MeetingService {
     return this.http.post<Meeting>(`${baseUrl}/${meetingId}/participants`, meetingParticipant);
   }
 
+  removeMeetingParticipant(meetingId: number, meetingParticipantUserId: number){
+    return this.http.delete(`${baseUrl}/${meetingId}/participants/${meetingParticipantUserId}`);
+  }
+
   addMeetingDocument(meetingId: number, meetingDocumentFile: File){
     const formData = new FormData();
     formData.append('meetingDocumentFile', meetingDocumentFile)
     return this.http.post<Meeting>(`${baseUrl}/${meetingId}/documents`, formData);
   }
 
-  getMeetingDocument(meetingId: number, documentId: number){
-    return this.http.get<Meeting>(`${baseUrl}/${meetingId}/documents/${documentId}`);
+  removeMeetingDocument(meetingId: number, meetingDocumentId: number){
+    return this.http.delete(`${baseUrl}/${meetingId}/documents/${meetingDocumentId}`);
+  }
+
+  getMeetingDocument(meetingId: number, meetingDocumentId: number): Observable<Blob>{
+    return this.http.get(`${baseUrl}/${meetingId}/documents/${meetingDocumentId}/download`, { responseType: 'blob' });
   }
 }

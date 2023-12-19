@@ -1,1 +1,279 @@
-<p>meeting-details works!</p>
+<div class="container-fluid meeting-details-component">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-footer text-body-secondary">
+          <b>Meeting Start:</b>
+          {{ getMeetingDate(currentMeeting?.startTime || "") }}
+          <b>Duration:</b>
+          {{
+            getMeetingDuration(
+              currentMeeting?.startTime || "",
+              currentMeeting?.endTime || ""
+            )
+          }}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h4>
+            <b>{{ currentMeeting?.title }}</b>
+          </h4>
+        </div>
+        <div class="card-body">
+          <h5>Description:</h5>
+          <p>{{ currentMeeting?.description }}</p>
+        </div>
+        <div class="card-footer">
+          <div *ngFor="let document of currentMeeting?.documents">
+            <i class="bi bi-file-richtext-fill"></i>
+            {{ document.documentTitle }}
+            <button
+              class="btn mini-button"
+              (click)="downloadDocument(document.id)"
+            >
+              <i class="bi bi-cloud-download-fill"></i>
+            </button>
+            <!-- Only visible to organizer -->
+            <button
+              class="btn mini-button"
+              *ngIf="currentMeeting?.organizer?.id === currentUser?.id"
+              href="#"
+              data-bs-toggle="modal"
+              [attr.data-bs-target]="'#removeDocumentModal' + document.id"
+            >
+              <i class="bi bi-trash-fill"></i>
+            </button>
+            <!-- Remove Document Modal -->
+            <div
+              class="modal fade"
+              id="removeDocumentModal{{ document.id }}"
+              tabindex="-1"
+              aria-labelledby="removeDocumentModal"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1
+                      class="modal-title fs-5"
+                      id="removeDocumentModal{{ document.id }}"
+                    >
+                      Remove document
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to remove
+                    {{ document.documentTitle }} from the meeting?
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-warning"
+                      data-bs-dismiss="modal"
+                    >
+                      <i class="bi bi-x">Cancel</i>
+                    </button>
+                    <button
+                      (click)="removeDocument(document.id)"
+                      data-bs-dismiss="modal"
+                      type="button"
+                      class="btn btn-danger"
+                    >
+                      <i class="bi bi-trash">Remove Document</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="add-document">
+            <button class="secondary-button btn btn-sm">
+              <i class="bi bi-cloud-upload-fill"></i> Add Document
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h4><b>Participants</b></h4>
+        </div>
+        <div class="card-body">
+          <div
+            class="participant"
+            *ngFor="let participant of currentMeeting?.participants"
+          >
+            <img
+              src="{{ participant.profileImageUrl }}"
+              width="50px"
+              height="50px"
+            />
+            <span class="participant-name">
+              {{ participant.firstName }} {{ participant.lastName }}
+            </span>
+            <small class="participant-email"
+              ><a href="mailto:sepp.acar@gmail.com"
+                ><span>{{ participant.email }}</span></a
+              >
+            </small>
+            <span
+              *ngIf="participant.userId == currentMeeting?.organizer?.id"
+              class="badge bg-warning"
+              >Organizer</span
+            >
+            <span
+              *ngIf="participant.userId != currentMeeting?.organizer?.id"
+              class="badge bg-secondary"
+              >Participant</span
+            >
+            <button
+              class="btn mini-button"
+              style="font-size: 22px"
+              *ngIf="participant.userId !== currentMeeting?.organizer?.id"
+              data-bs-toggle="modal"
+              [attr.data-bs-target]="
+                '#removeParticipantModal' + participant.userId
+              "
+            >
+              <i class="bi bi-person-fill-x"></i>
+            </button>
+            <!-- Remove Participant Modal -->
+            <div
+              class="modal fade"
+              id="removeParticipantModal{{ participant.userId }}"
+              tabindex="-1"
+              aria-labelledby="removeParticipantModal"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1
+                      class="modal-title fs-5"
+                      id="removeParticipantModal{{ participant.userId }}"
+                    >
+                      Remove participant
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to remove {{ participant.firstName }}
+                    {{ participant.lastName }} from the meeting?
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-warning"
+                      data-bs-dismiss="modal"
+                    >
+                      <i class="bi bi-x">Cancel</i>
+                    </button>
+                    <button
+                      (click)="removeParticipant(participant.userId)"
+                      data-bs-dismiss="modal"
+                      type="button"
+                      class="btn btn-danger"
+                    >
+                      <i class="bi bi-trash">Remove Participant</i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="add-participant">
+            <button
+              class="secondary-button btn btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#newParticipantModal"
+            >
+              <i class="bi bi-person-fill-add"></i> Add Participant
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add participant modal-->
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="newParticipantModal"
+  tabindex="-1"
+  aria-labelledby="newParticipantModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="newParticipantModal">
+          Add participant
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ng-select
+          *ngIf="isProfileImagesLoaded"
+          [multiple]="true"
+          [(ngModel)]="selectedParticipants"
+        >
+          <ng-container *ngFor="let user of allUsers">
+            <ng-option *ngIf="!isUserInMeeting(user.id)" [value]="user.id">
+              <img
+                src="{{ user.profileImageUrl }}"
+                width="30px"
+                height="30px"
+              />
+              {{ user.firstName }} {{ user.lastName }}
+              <small>{{ user.email }}</small>
+            </ng-option>
+          </ng-container>
+        </ng-select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          (click)="submitAddParticipants()"
+          data-bs-dismiss="modal"
+          class="btn btn-primary"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!---->
+<ngx-spinner
+  bdColor="rgba(0,0,0,0.3)"
+  size="large"
+  color="#fff"
+  type="line-spin-fade"
+  [fullScreen]="true"
+>
+  <p style="color: white"></p
+></ngx-spinner>

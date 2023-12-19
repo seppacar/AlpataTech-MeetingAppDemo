@@ -12,7 +12,7 @@ namespace AlpataTech.MeetingAppDemo.Entities
         public String LastName { get; set; } = String.Empty;
 
         [Required]
-        public string Email { get; set; } = String.Empty;
+        public String? Email { get; set; } = String.Empty;
 
         public String? PhoneNumber { get; set; }
 

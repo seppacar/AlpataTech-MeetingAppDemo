@@ -1,13 +1,13 @@
 export class MeetingDocument {
-    fileName: string;
-    fileExtension: string;
-    contentType: string;
+    id: number;
+    documentTitle: string | '';
+    documentType: string;
     fileData: File;
 
-    constructor(fileName: string, fileExtension: string, contentType: string, fileData: File) {
-        this.fileName = fileName;
-        this.fileExtension = fileExtension;
-        this.contentType = contentType;
-        this.fileData = fileData;
+    constructor(data: any) {
+        this.id = data.id;
+        this.documentTitle = data.documentTitle;
+        this.documentType = data.documentType;
+        this.fileData = data.fileData;
     }
 }

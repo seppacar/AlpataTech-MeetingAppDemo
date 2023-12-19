@@ -13,44 +13,58 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-meeting',
   templateUrl: './create-meeting.component.html',
-  styleUrls: ['./create-meeting.component.scss']
+  styleUrls: ['./create-meeting.component.scss'],
 })
 export class CreateMeetingComponent {
   currentUser: User | null = null;
-  isLoading = false
+  isLoading = false;
   isProfileImagesLoaded = false;
   users: User[] = [];
   // Form template fields
-  maxDurationInMinutes = 360
-  durationInterval = 30
-  meetingDurations = Array.from({ length: this.maxDurationInMinutes / this.durationInterval }, (_, index) => (index + 1) * this.durationInterval);
-  newMeeting = new Meeting({})
-  meetingDurationMinutes: number = this.durationInterval
+  maxDurationInMinutes = 360;
+  durationInterval = 30;
+  meetingDurations = Array.from(
+    { length: this.maxDurationInMinutes / this.durationInterval },
+    (_, index) => (index + 1) * this.durationInterval
+  );
+  newMeeting = new Meeting({});
+  meetingDurationMinutes: number = this.durationInterval;
   selectedDocuments: File[] = [];
   selectedParticipants = [];
 
-  constructor(private pageService: PageService, private uiService: UIService, private router: Router, private userService: UserService, private authService: AuthService, private meetingService: MeetingService) { }
+  constructor(
+    private pageService: PageService,
+    private uiService: UIService,
+    private router: Router,
+    private userService: UserService,
+    private authService: AuthService,
+    private meetingService: MeetingService
+  ) {}
 
   ngOnInit(): void {
-    this.fetchUsers()
-    this.pageService.setPageInfo('Organize Meeting', 'Lorem ipsum dolor ist amet')
+    this.fetchUsers();
+    this.pageService.setPageInfo(
+      'Organize Meeting',
+      'Lorem ipsum dolor ist amet'
+    );
 
-    this.authService.currentUser$.subscribe(user => {
+    this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
   }
 
   fetchUsers() {
-    this.userService.getAll()
-      .subscribe(
-        {
-          next: (users) => {
-            this.users = users
-          },
-          error: (error) => { console.error(error) },
-          complete: () => { this.fetchUserProfilePictures() }
-        }
-      )
+    this.userService.getAll().subscribe({
+      next: (users) => {
+        this.users = users;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        this.fetchUserProfilePictures();
+      },
+    });
   }
 
   fetchUserProfilePictures() {
@@ -58,17 +72,19 @@ export class CreateMeetingComponent {
       return this.userService.getProfilePicture(user.id);
     });
 
-    forkJoin(observables).subscribe(
-      {
-        next: (profileImages) => {
-          profileImages.forEach((blob, index) => {
-            this.users[index].profileImageUrl = URL.createObjectURL(blob);
-          });
-        },
-        error: (error) => { console.error(error) },
-        complete: () => { this.isProfileImagesLoaded = true }
-      }
-    );
+    forkJoin(observables).subscribe({
+      next: (profileImages) => {
+        profileImages.forEach((blob, index) => {
+          this.users[index].profileImageUrl = URL.createObjectURL(blob);
+        });
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        this.isProfileImagesLoaded = true;
+      },
+    });
   }
 
   onFileSelected(event: Event): void {
@@ -81,7 +97,7 @@ export class CreateMeetingComponent {
   }
 
   removeFile(file: File): void {
-    this.selectedDocuments = this.selectedDocuments.filter(f => f !== file);
+    this.selectedDocuments = this.selectedDocuments.filter((f) => f !== file);
   }
 
   // TODO: Replace this mess later (use something elegant like moment.js)
@@ -96,48 +112,66 @@ export class CreateMeetingComponent {
   }
 
   createMeeting() {
-    this.uiService.showSpinner()
+    this.uiService.showSpinner();
 
-    let createdMeetingId = -1
+    let createdMeetingId = -1;
     const startTimeString = this.newMeeting.startTime;
     const startTime = new Date(startTimeString);
-    const endTime = this.getISOStringWithLocalTimezone(new Date(startTime.getTime() + this.meetingDurationMinutes * 60000))
-    this.newMeeting.endTime = endTime
+    const endTime = this.getISOStringWithLocalTimezone(
+      new Date(startTime.getTime() + this.meetingDurationMinutes * 60000)
+    );
+    this.newMeeting.endTime = endTime;
 
     // Set loading
-    this.isLoading = true
+    this.isLoading = true;
 
     // Create meeting
-    this.meetingService.create(this.newMeeting)
-      .subscribe({
-        next: (meeting) => { createdMeetingId = meeting.id },
-        error: (error) => {
-          console.error(error)
-          this.uiService.hideSpinner()
-        },
-        complete: () => {
-          const addParticipantObservables = this.selectedParticipants.map((participant) => {
-            return this.meetingService.addMeetingParticipant(createdMeetingId, new MeetingParticipant({ userId: participant }));
-          });
+    this.meetingService.create(this.newMeeting).subscribe({
+      next: (meeting) => {
+        createdMeetingId = meeting.id;
+      },
+      error: (error) => {
+        console.error(error);
+        this.uiService.hideSpinner();
+      },
+      complete: () => {
+        const addParticipantObservables = this.selectedParticipants.map(
+          (participant) => {
+            return this.meetingService.addMeetingParticipant(
+              createdMeetingId,
+              new MeetingParticipant({ userId: participant })
+            );
+          }
+        );
 
-          const addDocumentObservables = this.selectedDocuments.map((document) => {
-            return this.meetingService.addMeetingDocument(createdMeetingId, document);
-          });
+        const addDocumentObservables = this.selectedDocuments.map(
+          (document) => {
+            return this.meetingService.addMeetingDocument(
+              createdMeetingId,
+              document
+            );
+          }
+        );
 
-          // Combine all observables using forkJoin
-          forkJoin([...addParticipantObservables, ...addDocumentObservables])
-            .pipe(finalize(() => {
+        // Combine all observables using forkJoin
+        forkJoin([...addParticipantObservables, ...addDocumentObservables])
+          .pipe(
+            finalize(() => {
               this.isLoading = false;
-              this.uiService.hideSpinner()
-              this.router.navigateByUrl(`/meeting-details/${createdMeetingId}`)
-            }))
-            .subscribe({
-              error: (error) => {
-                // TODO: Handle error here, destroy meeting if adding participants or documents failed?
-                console.error(error);
-              },
-            });
-        }
-      });
+              this.uiService.hideSpinner();
+              this.router.navigateByUrl(`/meeting-details/${createdMeetingId}`);
+            })
+          )
+          .subscribe({
+            error: (error) => {
+              // TODO: Handle error here, destroy meeting if adding participants or documents failed?
+              console.error(error);
+            },
+            complete: () => {
+              this.uiService.toastrShowSuccess('Meeting created');
+            },
+          });
+      },
+    });
   }
 }

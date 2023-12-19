@@ -15,6 +15,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
         Task<MeetingDto> UpdateMeetingAsync(int id, UpdateMeetingDto updateMeetingDto);
         Task DeleteMeetingAsync(int id);
         Task<MeetingDto> AddMeetingParticipantAsync(int meetingId, CreateMeetingParticipantDto createMeetingParticipantDto);
+        Task RemoveMeetingParticipantAsync(int meetingId, int participantUserId);
         Task<MeetingDocumentDto> AddMeetingDocumentAsync(int meetingId, FileUploadModel meetingDocumentUploadObject);
         Task<MeetingDocumentDto> GetMeetingDocumentObjectAsync(int meetingId, int meetingDocumentId);
         Task<byte[]> GetMeetingDocumentFileAsync(int meetingId, int meetingDocumentId);

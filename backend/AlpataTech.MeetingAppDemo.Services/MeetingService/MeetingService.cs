@@ -121,6 +121,30 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
             return meetingDto;
         }
 
+        public async Task RemoveMeetingParticipantAsync(int meetingId, int participantUserId)
+        {
+            // Fetch meeting from db
+            var meeting = await _meetingRepository.GetByIdAsync(meetingId);
+            if (meeting == null)
+            {
+                throw new Exception("Meeting not found");
+            }
+
+            // Retrieve participant from meeting object
+            var participantToDelete = meeting.Participants.FirstOrDefault(p => p.UserId == participantUserId);
+
+            if (participantToDelete == null)
+            {
+                throw new Exception("Participant with userId not found");
+            }
+            else
+            {
+                meeting.Participants.Remove(participantToDelete);
+                await _meetingRepository.SaveChangesAsync();
+            }
+
+        }
+
         public async Task<MeetingDocumentDto> AddMeetingDocumentAsync(int meetingId, FileUploadModel meetingDocumentUploadObject)
         {
             var meeting = await _meetingRepository.GetByIdAsync(meetingId);
@@ -203,7 +227,7 @@ namespace AlpataTech.MeetingAppDemo.Services.MeetingService
                 throw new Exception("Meeting not found");
             }
 
-            return meeting.Participants.Any(participant => participant.Id == userId);
+            return meeting.Participants.Any(participant => participant.UserId == userId);
         }
 
         public async Task<bool> IsUserOrganizer(int meetingId, int userId)
