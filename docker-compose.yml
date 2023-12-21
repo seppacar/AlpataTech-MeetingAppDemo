@@ -1,0 +1,23 @@
+﻿version: '3.4'
+
+services:
+  api:
+    image: alpatatechmeetingappdemoapi:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development # Development or Production
+      - ASPNETCORE_URLS=http://+:80
+      - DB_CONNECTION_STRING_PROD=Server=meetingappdemo-sql_server2022;Database=AlpataTechMeetingApp;User Id=SA;Password=YourSuperSecretPassword@123;trustservercertificate=true;
+      - DB_CONNECTION_STRING_DEV=Server=meetingappdemo-sql_server2022;Database=DEV_AlpataTechMeetingApp;User Id=SA;Password=YourSuperSecretPassword@123;trustservercertificate=true;
+    ports:
+      - "5000:80"
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: meetingappdemo-sql_server2022
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourSuperSecretPassword@123

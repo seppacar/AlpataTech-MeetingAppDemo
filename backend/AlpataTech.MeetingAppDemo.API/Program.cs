@@ -56,7 +56,42 @@ builder.Services.AddSwaggerGen(options =>
 
 
 // Database Configuration
-var dbConnectionString = builder.Configuration.GetConnectionString("Development");
+var dbConnectionString = "";
+
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+{
+    // Check if DB_CONNECTION_STRING_DEV environment variable is set then set connection string for the DbContext accordingly
+    var dbConnectionStringEnv = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_DEV");
+    if (!string.IsNullOrEmpty(dbConnectionStringEnv))
+    {
+        dbConnectionString = dbConnectionStringEnv;
+    }
+    else
+    {
+        dbConnectionString = builder.Configuration.GetConnectionString("Development");
+    }
+}
+// If not in DEV environment assume it is in production
+else
+{
+    // Check if DB_CONNECTION_STRING_PROD environment variable is set then set connection string for the DbContext accordingly
+    var dbConnectionStringEnv = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PROD");
+    if (!string.IsNullOrEmpty(dbConnectionStringEnv))
+    {
+        dbConnectionString = dbConnectionStringEnv;
+    }
+    else
+    {
+        dbConnectionString = builder.Configuration.GetConnectionString("Production");
+    }
+}
+
+if (string.IsNullOrEmpty(dbConnectionString)) {
+    Console.WriteLine("Database connection string is not set. Exiting the application.");
+    Environment.Exit(1);
+}
+Console.WriteLine("DATABASE CONNECTION STRING:" + dbConnectionString);
+
 builder.Services.SetupDbContext(dbConnectionString);
 
 // Repositories
