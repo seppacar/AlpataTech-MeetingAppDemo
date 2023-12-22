@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Meeting } from '../../models/meeting/meeting.model';
 import { MeetingParticipant } from '../../models/meeting/meeting-participant.model';
+import { environment } from '../../../../environments/environment.development';
 
-const baseUrl = 'http://localhost:5228/api/meetings';
+const baseUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'

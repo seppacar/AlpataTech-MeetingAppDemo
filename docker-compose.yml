@@ -15,11 +15,18 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development # Development or Production
+      - ASPNETCORE_ENVIRONMENT=Development # Development or Production, swagger is enabled in dev env
       - ASPNETCORE_URLS=http://+:80
       - DB_CONNECTION_STRING_PROD=Server=meetingappdemo-sql_server2022;Database=AlpataTechMeetingApp;User Id=sa;Password=YourSuperSecretPassword@123;trustservercertificate=true;
       - DB_CONNECTION_STRING_DEV=Server=meetingappdemo-sql_server2022;Database=DEV_AlpataTechMeetingApp;User Id=sa;Password=YourSuperSecretPassword@123;trustservercertificate=true;
     ports:
       - "5000:80"
     depends_on:
-     - database
+      - database
+  frontend:
+    image: angularfrontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"

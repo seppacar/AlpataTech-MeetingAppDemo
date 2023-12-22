@@ -6,8 +6,9 @@ import { UserRegistration } from '../../models/user/user-registration.model';
 import { StorageService } from '../storage/storage.service';
 import { User } from '../../models/user/user.model';
 import { UserService } from '../user/user.service';
+import { environment } from '../../../../environments/environment.development';
 
-const baseUrl = 'http://localhost:5228/api/auth';
+const baseUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
