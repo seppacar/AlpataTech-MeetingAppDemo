@@ -12,7 +12,7 @@ This repository contains a Dockerized setup for a meeting organization applicati
 
     ```bash
     git clone https://github.com/seppacar/AlpataTech-MeetingAppDemo.git
-    cd meeting-app-demo
+    cd AlpataTech-MeetingAppDemo
     ```
 
 2. Build and run the application using Docker Compose:
