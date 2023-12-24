@@ -5,8 +5,6 @@ import { MeetingService } from '../../core/services/meeting/meeting.service';
 import { UserService } from '../../core/services/user/user.service';
 import { User } from '../../core/models/user/user.model';
 import { Meeting } from '../../core/models/meeting/meeting.model';
-import { UIService } from '../../core/services/ui/ui.service';
-import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,48 +21,39 @@ export class DashboardComponent {
     private pageService: PageService,
     private authService: AuthService,
     private meetingService: MeetingService,
-    private userService: UserService,
-    private uiService: UIService
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.uiService.showSpinner()
-
     this.pageService.setPageInfo('Dashboard', 'Lorem ipsum dolor ist amet');
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
 
-    this.meetingService.getParticipatedMeetings()
-    .pipe(
-      finalize(() => {
-        this.uiService.hideSpinner()
-      })
-    )
-    .subscribe(
-      {
-        next: (meetings) => {
-          this.participatedMeetings = meetings;
-          meetings.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
-        },
-        error: (error) => {console.error(error)}
-      }
-    )
+    //
+    // Generate mock data
+    for (let i = 1; i <= 20; i++) {
+      const mockMeeting = new Meeting({
+        id: i,
+        title: `Meeting ${i}`,
+        description: `Description for Meeting ${i}`,
+        organizer: { id: i, name: `Organizer ${i}` },
+        participants: [1, 2, 3, 2, 4, 5, 2],
+        documents: [],
+        startTime: '2023-01-01T10:00:00',
+        endTime: '2023-01-01T12:00:00',
+      });
+
+      this.participatedMeetings.push(mockMeeting);
+    }
   }
 
   fetchUpcompingMeetings() {
     // Get participated meetings
   }
 
-  fetchParticipantProfilePicture(id: number){
-    let blobUrl = ''
-    this.userService.getProfilePicture(id)
-    .subscribe(
-      {
-        next: (blob) => {blobUrl = URL.createObjectURL(blob)},
-      }
-    )
-    return blobUrl
+  fetchMeetingPeople() {
+    console.log();
   }
 
   get paginatedMeetings(): Meeting[] {

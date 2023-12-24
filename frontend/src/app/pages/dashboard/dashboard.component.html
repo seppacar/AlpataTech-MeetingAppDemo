@@ -23,10 +23,7 @@
                 *ngFor="let participant of meeting.participants; let i = index"
               >
                 <div class="participant" *ngIf="i < 5">
-                  <img
-                  [alt]="participant.firstName + ' ' + participant.lastName "
-                  [title]="participant.firstName + ' ' + participant.lastName " 
-                  [src]="fetchParticipantProfilePicture(participant.id)" />
+                  <img src="https://placehold.co/50x50" />
                 </div>
               </div>
               <div *ngIf="meeting.participants.length > 5">
@@ -36,7 +33,7 @@
             </div>
             <div class="meeting-time">
                 <span
-                >{{calculateTimeRemaining(meeting.startTime)}}</span>
+                >{{calculateTimeRemaining("2023-12-31T15:16:24.056")}}</span>
             </div>
             <div>
               <a [href]="'meeting-details/' + meeting.id"> Details </a>
