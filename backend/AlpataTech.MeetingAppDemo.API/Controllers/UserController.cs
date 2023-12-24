@@ -52,7 +52,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             {
                 // Check the file extension
                 var fileExtension = Path.GetExtension(profilePhoto.FileName).ToLower();
-                string[] permittedExtensions = { ".jpg", ".jpeg", "png", "webp" };
+                string[] permittedExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
 
                 // Check if the extension is permitted
                 if (!permittedExtensions.Contains(fileExtension))
@@ -130,7 +130,7 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
 
             var user = await _userService.GetUserByIdAsync(userId);
 
-            if (user == null || userId == null)
+            if (user == null)
             {
                 // User not found
                 return NotFound();

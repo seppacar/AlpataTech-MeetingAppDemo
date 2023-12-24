@@ -9,7 +9,7 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
 {
     public class EmailService : IEmailService
     {
-        private readonly string appName = Environment.GetEnvironmentVariable("APP_NAME") ?? _configuration["AppName"];
+        private readonly string appName;
         private readonly string smtpServer;
         private readonly int smtpPort;
         private readonly string smtpUsername;
@@ -19,8 +19,9 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
         public EmailService(IConfiguration configuration)
         {
             _configuration = configuration;
+            appName = Environment.GetEnvironmentVariable("APP_NAME") ?? _configuration["AppName"];
             smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER") ?? _configuration["EmailSettings:SmtpServer"];
-            smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")) ?? int.Parse(_configuration["EmailSettings:SmtpPort"]);
+            smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT") ?? _configuration["EmailSettings:SmtpPort"]);
             smtpUsername = Environment.GetEnvironmentVariable("SMTP_USERNAME") ?? _configuration["EmailSettings:SmtpUsername"];
             smtpPassword = Environment.GetEnvironmentVariable("SMTP_PASSWORD") ?? _configuration["EmailSettings:SmtpPassword"];
         }

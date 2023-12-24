@@ -46,7 +46,7 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
                 var compressedImage = _imageService.CompressAndConvertWebP(profilePictureFile.FileData);
 
                 // Call the service to upload the file
-                _fileStorageService.UploadFileAsync(compressedImage, fileName);
+                await _fileStorageService.UploadFileAsync(compressedImage, fileName);
 
                 // Store JUST filename since we are using one folder for all files for now
                 user.ProfileImage = fileName;
