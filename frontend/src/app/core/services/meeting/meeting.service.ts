@@ -22,6 +22,10 @@ export class MeetingService {
     return this.http.get<Meeting>(`${baseUrl}/${id}`);
   }
 
+  getParticipatedMeetings(): Observable<Meeting[]> {
+    return this.http.get<Meeting[]>(`${baseUrl}/getParticipatedMeetings`);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(baseUrl, data);
   }
