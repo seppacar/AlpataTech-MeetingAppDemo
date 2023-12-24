@@ -371,4 +371,4 @@ FodyWeavers.xsd
 # Frontend project
 /frontend/.vscode
 /frontend/.gitignore
-/frontend/.angular/cache/17.0.6/frontend
+/frontend/.angular
