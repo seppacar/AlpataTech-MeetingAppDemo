@@ -21,5 +21,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public Task<byte[]> GetDefaultProfilePicture()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

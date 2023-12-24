@@ -5,5 +5,6 @@
         Task<string> UploadFileAsync(byte[] fileData, string fileName);
         Task<byte[]> GetFileAsync(string fileName);
         Task DeleteFileAsync(string fileName);
+        Task<byte[]> GetDefaultProfilePicture();
     }
 }

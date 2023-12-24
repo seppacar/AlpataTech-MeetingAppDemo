@@ -52,7 +52,28 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.LocalFileStorageService
             {
                 // Combine the storage path with the file name to get the full file path
                 string filePath = Path.Combine(_storagePath, fileName);
-                Console.WriteLine("YOUR FİLE İSSS" + filePath);
+                // Check if the file exists
+                if (!File.Exists(filePath))
+                {
+                    throw new FileNotFoundException("File not found.", filePath);
+                }
+
+                // Read the file into a byte array
+                return Task.Run(() => File.ReadAllBytes(filePath));
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions according to your requirements
+                throw new Exception("An error occurred while reading the file.", ex);
+            }
+        }
+
+        public Task<byte[]> GetDefaultProfilePicture()
+        {
+            try
+            {
+                // Combine the storage path with the file name to get the full file path
+                string filePath = Path.Combine("Resources", "default-profile-picture.png");
                 // Check if the file exists
                 if (!File.Exists(filePath))
                 {

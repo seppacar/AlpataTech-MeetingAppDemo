@@ -210,22 +210,22 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
         public async Task<byte[]?> GetProfilePicture(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            if (user != null)
+
+            if (user == null || string.IsNullOrWhiteSpace(user.ProfileImage))
             {
-                if (user.ProfileImage != null)
-                {
-                    Console.WriteLine("USER PROFİLE İMAGE İS" + user.ProfileImage);
-                    return await _fileStorageService.GetFileAsync(user.ProfileImage);
-                }
-                else
-                {
-                    // TODO: Return default profile picture
-                    return await _fileStorageService.GetFileAsync(null);
-                }
+                return await _fileStorageService.GetFileAsync("default_profile_picture.png");
             }
-            else
+
+            try
             {
-                return null;
+                return await _fileStorageService.GetFileAsync(user.ProfileImage);
+            }
+            catch (Exception e)
+            {
+                // Log the exception if needed
+                Console.WriteLine($"Exception while retrieving profile picture: {e.Message}");
+                // Return the default profile picture in case of an exception
+                return await _fileStorageService.GetDefaultProfilePicture();
             }
         }
     }
