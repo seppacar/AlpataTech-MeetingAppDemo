@@ -12,11 +12,17 @@ namespace AlpataTech.MeetingAppDemo.Services.AuthService
     {
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
+        private readonly string JwtIssuer;
+        private readonly string JwtAudience;
+        private readonly string JwtSecret;
 
         public AuthService(IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
             _userService = userService;
+            JwtIssuer = _configuration["Authentication:JWT:Issuer"];
+            JwtAudience = _configuration["Authentication:JWT:Audience"];
+            JwtSecret = _configuration["Authentication:JWT:Secret"];
         }
         public async Task<string> GenerateJWT(UserAuthDto userAuthDto)
         {
@@ -41,11 +47,11 @@ namespace AlpataTech.MeetingAppDemo.Services.AuthService
                 claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
             }
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:JWT:Secret"]));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSecret));
 
             var token = new JwtSecurityToken(
-                _configuration["Authentication:JWT:Issuer"],
-                _configuration["Authentication:JWT:Audience"],
+                JwtIssuer,
+                JwtAudience,
                 claims,
                 expires: DateTime.Now.AddHours(1), // Adjust token expiration as needed
                 signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)

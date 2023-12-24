@@ -222,8 +222,6 @@ namespace AlpataTech.MeetingAppDemo.Services.UserService
             }
             catch (Exception e)
             {
-                // Log the exception if needed
-                Console.WriteLine($"Exception while retrieving profile picture: {e.Message}");
                 // Return the default profile picture in case of an exception
                 return await _fileStorageService.GetDefaultProfilePicture();
             }

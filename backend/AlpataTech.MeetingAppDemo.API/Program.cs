@@ -90,7 +90,6 @@ if (string.IsNullOrEmpty(dbConnectionString)) {
     Console.WriteLine("Database connection string is not set. Exiting the application.");
     Environment.Exit(1);
 }
-Console.WriteLine("DATABASE CONNECTION STRING:" + dbConnectionString);
 
 builder.Services.SetupDbContext(dbConnectionString);
 

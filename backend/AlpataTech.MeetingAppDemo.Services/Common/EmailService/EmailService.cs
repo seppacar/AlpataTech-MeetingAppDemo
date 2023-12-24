@@ -9,7 +9,7 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
 {
     public class EmailService : IEmailService
     {
-        private readonly string appName = "AlpataTech Demo APP"; // TODO: initalize it using appsettings.json
+        private readonly string appName = Environment.GetEnvironmentVariable("APP_NAME") ?? _configuration["AppName"];
         private readonly string smtpServer;
         private readonly int smtpPort;
         private readonly string smtpUsername;
@@ -19,11 +19,10 @@ namespace AlpataTech.MeetingAppDemo.Services.Common.EmailService
         public EmailService(IConfiguration configuration)
         {
             _configuration = configuration;
-            // Retrieve SMTP settings from configuration
-            smtpServer = _configuration["EmailSettings:SmtpServer"];
-            smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"]);
-            smtpUsername = _configuration["EmailSettings:SmtpUsername"];
-            smtpPassword = _configuration["EmailSettings:SmtpPassword"];
+            smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER") ?? _configuration["EmailSettings:SmtpServer"];
+            smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")) ?? int.Parse(_configuration["EmailSettings:SmtpPort"]);
+            smtpUsername = Environment.GetEnvironmentVariable("SMTP_USERNAME") ?? _configuration["EmailSettings:SmtpUsername"];
+            smtpPassword = Environment.GetEnvironmentVariable("SMTP_PASSWORD") ?? _configuration["EmailSettings:SmtpPassword"];
         }
         public async Task SendEmailAsync(string to, string subject, string body)
         {
