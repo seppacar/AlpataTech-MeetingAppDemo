@@ -4,6 +4,7 @@ using AlpataTech.MeetingAppDemo.Entities.DTO.MeetingParticipant;
 using AlpataTech.MeetingAppDemo.Services.MeetingService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace AlpataTech.MeetingAppDemo.API.Controllers
@@ -229,6 +230,29 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             else
             {
                 return Forbid();
+            }
+        }
+
+        [HttpGet("getParticipatedMeetings")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetParticipatedMeetings()
+        {
+            // Extract "sub" from JWT (which is userId) and convert to int
+            var userIdentity = User.Identity as ClaimsIdentity;
+            var userId = Convert.ToInt32(userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            Expression<Func<Meeting, bool>> predicate = meeting => meeting.Organizer.Id == userId;
+
+            var meetings = await _meetingService.FindMeetingsAsync(predicate);
+
+            if (meetings == null)
+            {
+                // User not found
+                return NotFound();
+            }
+            else
+            {
+                return Ok(meetings);
             }
         }
     }
