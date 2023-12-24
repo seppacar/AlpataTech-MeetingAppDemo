@@ -35,7 +35,7 @@ export class MeetingService {
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${baseUrl}/${id}`);
+    return this.http.delete(`${baseUrl}/?id=${id}`);
   }
 
   addMeetingParticipant(meetingId: number, meetingParticipant: MeetingParticipant){

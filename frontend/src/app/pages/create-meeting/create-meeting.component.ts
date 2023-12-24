@@ -89,10 +89,15 @@ export class CreateMeetingComponent {
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+    
     if (input.files && input.files.length) {
-      for (let i = 0; i < input.files.length; i++) {
-        this.selectedDocuments.push(input.files[i]);
-      }
+      // Convert FileList to array using Array.from
+      const files: File[] = Array.from(input.files);
+  
+      // Use forEach for readability
+      files.forEach((file) => {
+        this.selectedDocuments.push(file);
+      });
     }
   }
 

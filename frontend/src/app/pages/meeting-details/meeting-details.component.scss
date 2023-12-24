@@ -6,6 +6,16 @@
     inset 0 -8px 8px -8px rgba(0, 0, 0, 0.3);
   background-color: #fffafa;
 
+  .meeting-header{
+    display: flex;
+    align-items: center;
+    b{
+      padding-left: 10px;
+    }
+    .remove-meeting-button{
+      margin-left: auto;
+    }
+  }
   .participant {
     margin-bottom: 5px;
     img {

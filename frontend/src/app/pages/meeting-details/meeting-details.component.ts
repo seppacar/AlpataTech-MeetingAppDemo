@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Meeting } from '../../core/models/meeting/meeting.model';
 import { MeetingService } from '../../core/services/meeting/meeting.service';
 import { PageService } from '../../core/services/page/page.service';
@@ -19,11 +19,12 @@ export class MeetingDetailsComponent {
   // Here for add participants functionality it would be better if create seperate features for these
   allUsers: User[] = [];
   selectedParticipants = [];
+  selectedDocuments: File[] = [];
   isProfileImagesLoaded = false;
   //
   //
   currentUser: User | null = null;
-  currentMeeting: Meeting | null = null
+  currentMeeting: Meeting | null = null;
   //
   constructor(
     private route: ActivatedRoute,
@@ -31,14 +32,18 @@ export class MeetingDetailsComponent {
     private userService: UserService,
     private pageService: PageService,
     private uiService: UIService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
-    this.pageService.setPageInfo('Meeting Details', 'Lorem ipsum dolor sit amet');
+    this.pageService.setPageInfo(
+      'Meeting Details',
+      'Lorem ipsum dolor sit amet'
+    );
     this.getMeeting(this.route.snapshot.params['id']);
     this.fetchUsers();
   }
@@ -51,7 +56,9 @@ export class MeetingDetailsComponent {
       error: (error) => {
         console.error(error);
       },
-      complete: () => {this.fetchParticipantProfilePictures()}
+      complete: () => {
+        this.fetchParticipantProfilePictures();
+      },
     });
   }
 
@@ -63,31 +70,33 @@ export class MeetingDetailsComponent {
   getMeetingDuration(meetingStart: string, meetingEnd: string): string {
     const startDate = new Date(meetingStart);
     const endDate = new Date(meetingEnd);
-    
-    const durationInMinutes = (endDate.getTime() - startDate.getTime()) / (1000 * 60);
+
+    const durationInMinutes =
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60);
     const hours = Math.floor(durationInMinutes / 60);
     const minutes = Math.floor(durationInMinutes % 60);
 
-    if(hours > 0){
+    if (hours > 0) {
       return `${hours} hrs ${minutes} mins`;
-    }
-    else{
+    } else {
       return `${minutes} minutes`;
     }
-
   }
 
   fetchParticipantProfilePictures() {
     this.currentMeeting?.participants.forEach((participant) => {
-      this.userService.getProfilePicture(participant.userId)
-      .subscribe({
+      this.userService.getProfilePicture(participant.userId).subscribe({
         next: (profileImageBlob) => {
           participant.profileImageUrl = URL.createObjectURL(profileImageBlob);
         },
-        error: (error) => {console.error(error)},
-        complete: () => {console.log("yes")}
-      })
-    })
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          console.log('yes');
+        },
+      });
+    });
   }
 
   fetchUsers() {
@@ -131,30 +140,36 @@ export class MeetingDetailsComponent {
     );
   }
 
-  submitAddParticipants(){
-    if(this.currentMeeting){
-      this.uiService.showSpinner()
-      const meetingId = this.currentMeeting.id
-      const addParticipantObservables = this.selectedParticipants.map((participant) => {
-        return this.meetingService.addMeetingParticipant(meetingId, new MeetingParticipant({ userId: participant }));
-      });
+  submitAddParticipants() {
+    if (this.currentMeeting) {
+      this.uiService.showSpinner();
+      const meetingId = this.currentMeeting.id;
+      const addParticipantObservables = this.selectedParticipants.map(
+        (participant) => {
+          return this.meetingService.addMeetingParticipant(
+            meetingId,
+            new MeetingParticipant({ userId: participant })
+          );
+        }
+      );
       forkJoin(addParticipantObservables)
-      .pipe(
-        finalize(() => {
-          this.uiService.hideSpinner()
-        })
-      ).subscribe({
-        next: () => {
-          this.selectedParticipants = []
-          this.getMeeting(meetingId)
-        },
-        error: (error) => {
-          console.error(error);
-        },
-        complete: () => {
-          this.uiService.toastrShowSuccess('Participant added');
-        },
-      })
+        .pipe(
+          finalize(() => {
+            this.uiService.hideSpinner();
+          })
+        )
+        .subscribe({
+          next: () => {
+            this.selectedParticipants = [];
+            this.getMeeting(meetingId);
+          },
+          error: (error) => {
+            console.error(error);
+          },
+          complete: () => {
+            this.uiService.toastrShowSuccess('Participant added');
+          },
+        });
     }
   }
 
@@ -182,9 +197,61 @@ export class MeetingDetailsComponent {
     }
   }
 
-  addDocument() {
-    // Add new document to the meeting
-    console.log('implement');
+  addSelectedDocuments() {
+    // Show spinner while documents are being added
+    this.uiService.showSpinner();
+
+    // Initialize a counter for the number of documents to add
+    let numberOfDocumentsToAdd = 0;
+
+    // Iterate through selected documents
+    this.selectedDocuments.forEach((document) => {
+      // Check if there is a current meeting
+      if (this.currentMeeting) {
+        // Increment the counter for each document
+        numberOfDocumentsToAdd += 1;
+
+        // Add the document to the current meeting using the meeting service
+        this.meetingService
+          .addMeetingDocument(this.currentMeeting.id, document)
+          .subscribe({
+            next: () => {
+              // Decrement the counter when a document is successfully added
+              numberOfDocumentsToAdd -= 1;
+            },
+            complete: () => {
+              // Check if all documents have been processed
+              if (numberOfDocumentsToAdd === 0) {
+                // Hide the spinner and display a success message
+                this.uiService.hideSpinner();
+                this.uiService.toastrShowSuccess('Files added successfully');
+                // Empty selected documents
+                this.selectedDocuments = [];
+                // Reload the meeting
+                this.getMeeting(this.currentMeeting?.id ?? 0);
+              }
+            },
+          });
+      }
+    });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length) {
+      // Convert FileList to array using Array.from
+      const files: File[] = Array.from(input.files);
+
+      // Use forEach for readability
+      files.forEach((file) => {
+        this.selectedDocuments.push(file);
+      });
+    }
+  }
+
+  removeSelectedDocument(file: File): void {
+    this.selectedDocuments = this.selectedDocuments.filter((f) => f !== file);
   }
 
   // Remove document from meeting
@@ -203,9 +270,7 @@ export class MeetingDetailsComponent {
           },
           complete: () => {
             this.uiService.hideSpinner();
-            this.uiService.toastrShowWarning(
-              'Document removed from meeting!'
-            );
+            this.uiService.toastrShowWarning('Document removed from meeting!');
           },
         });
     }
@@ -245,12 +310,19 @@ export class MeetingDetailsComponent {
   }
 
   destroyMeeting() {
+    if (this.currentMeeting) {
+      this.uiService.showSpinner();
+      this.meetingService.delete(this.currentMeeting.id).subscribe({
+        next: () => {
+          this.router.navigateByUrl("dashboard");
+        },
+        complete: () => {
+          this.uiService.hideSpinner()
+          this.uiService.toastrShowWarning("Meeting deleted successfully")
+        }
+      });
+    }
     // destroy meeting
     console.log('implement');
-  }
-  
-
-  testFun(data: any) {
-    console.log(data);
   }
 }

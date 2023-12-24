@@ -14,6 +14,7 @@ import { finalize } from 'rxjs';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
+  participantsToFetch: Set<number> = new Set<number>();
   currentUser: User | null = null;
   participatedMeetings: Meeting[] = [];
   participatedMeetingsCurrentPage = 1;
@@ -28,28 +29,57 @@ export class DashboardComponent {
   ) {}
 
   ngOnInit(): void {
-    this.uiService.showSpinner()
+    this.uiService.showSpinner();
 
     this.pageService.setPageInfo('Dashboard', 'Lorem ipsum dolor ist amet');
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
     });
 
-    this.meetingService.getParticipatedMeetings()
-    .pipe(
-      finalize(() => {
-        this.uiService.hideSpinner()
-      })
-    )
-    .subscribe(
-      {
+    this.meetingService
+      .getParticipatedMeetings()
+      .pipe(
+        finalize(() => {
+          this.uiService.hideSpinner();
+          // Fetch participant profile images and store them as url to the belonging objects in participated meetings
+          this.participantsToFetch.forEach((id) => {
+            this.userService.getProfilePicture(id).subscribe({
+              next: (profilePictureBlob) => {
+                // Store profile picutre as blobUrl
+                this.participatedMeetings.map((meeting) => {
+                  const participant = meeting.participants.find(
+                    (participant) => participant.userId == id
+                  );
+                  if (participant) {
+                    participant.profileImageUrl =
+                      URL.createObjectURL(profilePictureBlob);
+                  }
+                });
+              },
+            });
+          });
+          console.log(this.participatedMeetings);
+        })
+      )
+      .subscribe({
         next: (meetings) => {
           this.participatedMeetings = meetings;
-          meetings.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+          meetings.sort(
+            (a, b) =>
+              new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
+          );
         },
-        error: (error) => {console.error(error)}
-      }
-    )
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          this.participatedMeetings.map((meeting) => {
+            meeting.participants.forEach((participant) => {
+              this.participantsToFetch.add(participant.userId);
+            });
+          });
+        },
+      });
   }
 
   get paginatedMeetings(): Meeting[] {
@@ -67,6 +97,7 @@ export class DashboardComponent {
     const pageCount = Math.ceil(this.totalItems / this.itemsPerPage);
     return Array.from({ length: pageCount }, (_, index) => index + 1);
   }
+
   setCurrentPage(page: number): void {
     this.participatedMeetingsCurrentPage = page;
   }
