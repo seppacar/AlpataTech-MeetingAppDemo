@@ -16,12 +16,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4200:80"
+    depends_on:
+      - api
   api:
     image: alpatatechmeetingappdemoapi:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
-    entrypoint: ["/bin/bash", "-c", "/app/scripts/wait-for-it.sh meetingappdemo-sql_server2022:1433 -- /app/migrations_bundle && dotnet AlpataTech.MeetingAppDemo.API.dll"]
+    entrypoint: ["bash", "-c", "/app/scripts/wait-for-it.sh meetingappdemo-sql_server2022:1433 -- /app/migrations_bundle && dotnet AlpataTech.MeetingAppDemo.API.dll"]
     environment:
       - ASPNETCORE_ENVIRONMENT=Development # Development or Production, swagger is enabled in dev env
       - ASPNETCORE_URLS=http://+:80
