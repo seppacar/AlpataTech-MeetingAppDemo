@@ -1,6 +1,5 @@
 # AlpataTech.MeetingAppDemo
-
-This repository contains a Dockerized setup for a MSSQL Server database, an Angular frontend, and a .NET Core API.
+This repository contains a Dockerized setup for a meeting organization application which I created during my summer internship at [Alpata Yazılım ve Teknoloji](https://www.linkedin.com/company/alpatateknoloji) which consists MSSQL Server database, an Angular frontend, and a .NET Core API.
 
 ## Prerequisites
 
@@ -12,8 +11,8 @@ This repository contains a Dockerized setup for a MSSQL Server database, an Angu
 1. Clone this repository:
 
     ```bash
-    git clone https://github.com/seppacar/meeting-app-demo.git
-    cd meeting-app-demo
+    git clone https://github.com/seppacar/AlpataTech-MeetingAppDemo.git
+    cd AlpataTech-MeetingAppDemo
     ```
 
 2. Build and run the application using Docker Compose:
