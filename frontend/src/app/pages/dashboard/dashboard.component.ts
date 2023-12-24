@@ -52,21 +52,6 @@ export class DashboardComponent {
     )
   }
 
-  fetchUpcompingMeetings() {
-    // Get participated meetings
-  }
-
-  fetchParticipantProfilePicture(id: number){
-    let blobUrl = ''
-    this.userService.getProfilePicture(id)
-    .subscribe(
-      {
-        next: (blob) => {blobUrl = URL.createObjectURL(blob)},
-      }
-    )
-    return blobUrl
-  }
-
   get paginatedMeetings(): Meeting[] {
     const startIndex =
       (this.participatedMeetingsCurrentPage - 1) * this.itemsPerPage;

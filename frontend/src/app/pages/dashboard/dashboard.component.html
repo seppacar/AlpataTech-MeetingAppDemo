@@ -1,65 +1,67 @@
 <div class="container-fluid dashboard-component">
-    <div class="row">
-      <div class="col-lg-6">
-        <h3>Welcome, {{ currentUser?.firstName }}</h3>
+  <div class="row">
+    <div class="col-lg-6">
+      <h3>Welcome, {{ currentUser?.firstName }}</h3>
+    </div>
+    <div class="col-lg-6">
+      <div style="text-align: end">
+        <a href="organize-meeting"
+          ><button class="btn secondary-button">Create new meeting</button></a
+        >
       </div>
-      <div class="col-lg-6">
-        <div style="text-align: end">
-          <a href="organize-meeting"
-            ><button class="btn secondary-button">Create new meeting</button></a
-          >
-        </div>
-        <h2>Upcoming Meetings</h2>
-        <ul class="meetings-list">
-          <li *ngFor="let meeting of paginatedMeetings">
-            <div class="meeting-row">
-              <div class="title">
-                <span>
-                  {{ meeting.title }}
-                </span>
-              </div>
-              <div class="participants">
-                <div
-                  *ngFor="let participant of meeting.participants; let i = index"
-                >
-                  <div class="participant" *ngIf="i < 5">
-                    <img
-                    [alt]="participant.firstName + ' ' + participant.lastName "
-                    [title]="participant.firstName + ' ' + participant.lastName " 
-                    [src]="fetchParticipantProfilePicture(participant.id)" />
-                  </div>
-                </div>
-                <div *ngIf="meeting.participants.length > 5">
-                  <!-- Indication for additional participants -->
-                  +{{ meeting.participants.length - 5 }} more
+      <h2>Upcoming Meetings</h2>
+      <ul class="meetings-list">
+        <li *ngFor="let meeting of paginatedMeetings">
+          <div class="meeting-row">
+            <div class="title">
+              <span>
+                {{ meeting.title }}
+              </span>
+            </div>
+            <div class="participants">
+              <div
+                *ngFor="let participant of meeting.participants; let i = index"
+              >
+                <div class="participant" *ngIf="i < 5">
+                  <img
+                    width="50px"
+                    height="50px"
+                    [alt]="participant.firstName + ' ' + participant.lastName"
+                    [title]="participant.firstName + ' ' + participant.lastName"
+                    src="assets/images/profile-placeholder.png"
+                  />
                 </div>
               </div>
-              <div class="meeting-time">
-                  <span
-                  >{{calculateTimeRemaining(meeting.startTime)}}</span>
-              </div>
-              <div>
-                <a [href]="'meeting-details/' + meeting.id"> Details </a>
+              <div *ngIf="meeting.participants.length > 5">
+                <!-- Indication for additional participants -->
+                +{{ meeting.participants.length - 5 }} more
               </div>
             </div>
+            <div class="meeting-time">
+              <span>{{ calculateTimeRemaining(meeting.startTime) }}</span>
+            </div>
+            <div>
+              <a [href]="'meeting-details/' + meeting.id"> Details </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <nav aria-label="Page navigation">
+        <ul class="pagination pagination-lg">
+          <li class="page-item" *ngFor="let page of pages">
+            <button
+              [ngStyle]="{
+                'background-color':
+                  participatedMeetingsCurrentPage === page ? '#bbb' : ''
+              }"
+              class="secondary-button"
+              (click)="setCurrentPage(page)"
+            >
+              {{ page }}
+            </button>
           </li>
         </ul>
-        <nav aria-label="Page navigation">
-          <ul class="pagination pagination-lg">
-            <li class="page-item" *ngFor="let page of pages">
-              <button
-                [ngStyle]="{
-                  'background-color':
-                    participatedMeetingsCurrentPage === page ? '#bbb' : ''
-                }"
-                class="secondary-button"
-                (click)="setCurrentPage(page)"
-              >
-                {{ page }}
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      </nav>
     </div>
   </div>
+</div>
