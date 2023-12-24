@@ -45,13 +45,26 @@ This repository contains a Dockerized setup for a meeting organization applicati
 
 ## Environment Variables
 
+## Environment Variables
+
 - **SQL Server:**
   - `SA_PASSWORD`: Your Super Secret Password for the SQL Server.
 
 - **API:**
-  - `ASPNETCORE_ENVIRONMENT`: Set to `Development` for development environment.
-  - `DB_CONNECTION_STRING_PROD`: Connection string for production database.
-  - `DB_CONNECTION_STRING_DEV`: Connection string for development database.
+  - `ASPNETCORE_ENVIRONMENT`: Set to `Development` for the development environment.
+  - `DB_CONNECTION_STRING_PROD`: Connection string for the production database.
+  - `DB_CONNECTION_STRING_DEV`: Connection string for the development database.
+
+- **SMTP Configuration:**
+  - `SMTP_SERVER`: SMTP server address for email communication.
+  - `SMPT_PORT`: SMTP server port.
+  - `SMTP_USERNAME`: SMTP username for authentication.
+  - `SMTP_PASSWORD`: SMTP password for authentication.
+
+- **JWT Configuration:**
+  - `JWT_AUDIENCE`: Your JWT audience.
+  - `JWT_ISSUER`: Your JWT issuer.
+  - `JWT_SECRET`: Your at least 128-bit JWT secret.
 
 ## Notes
 
