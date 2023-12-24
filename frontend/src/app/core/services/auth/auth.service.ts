@@ -8,7 +8,7 @@ import { User } from '../../models/user/user.model';
 import { UserService } from '../user/user.service';
 import { environment } from '../../../../environments/environment.development';
 
-const baseUrl = environment.apiUrl;
+const baseUrl = environment.apiUrl + '/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +26,9 @@ export class AuthService {
       this.userService.getUserDetailsWithToken().subscribe({
         next: (user) => {
           this.currentUserSubject.next(user)
-          console.log("AuthService construct user set")
         },
         error: (error) => {
+          this.storageService.removeToken();
           console.error("Error fetching user details:", error);
         },
         complete: () => {

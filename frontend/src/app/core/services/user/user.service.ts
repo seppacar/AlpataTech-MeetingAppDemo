@@ -5,7 +5,7 @@ import { User } from '../../models/user/user.model';
 import { environment } from '../../../../environments/environment.development';
 
 
-const baseUrl = environment.apiUrl;
+const baseUrl = environment.apiUrl + '/users';
 
 @Injectable({
   providedIn: 'root'

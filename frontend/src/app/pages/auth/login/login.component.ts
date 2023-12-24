@@ -33,7 +33,7 @@ export class LoginComponent {
       )
       .subscribe({
         next: () => {
-          console.log("Succesfully logged in")
+          this.uiService.toastrShowSuccess("Welcome!")
         },
         error: (error) => {
           this.uiService.hideSpinner()

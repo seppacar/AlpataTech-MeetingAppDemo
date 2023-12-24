@@ -5,7 +5,7 @@ import { Meeting } from '../../models/meeting/meeting.model';
 import { MeetingParticipant } from '../../models/meeting/meeting-participant.model';
 import { environment } from '../../../../environments/environment.development';
 
-const baseUrl = environment.apiUrl;
+const baseUrl = environment.apiUrl + '/meetings';
 
 @Injectable({
   providedIn: 'root'

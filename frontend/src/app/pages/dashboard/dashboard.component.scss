@@ -1,5 +1,4 @@
 div {
-    border: 1px solid red;
 }
 
 .dashboard-component{
@@ -8,4 +7,40 @@ div {
     padding: 30px;
     box-shadow:  0 8px 8px -8px rgba(0,0,0,.3), inset 0 -8px 8px -8px rgba(0,0,0,.3);
     background-color: #FFFAFA;
+}
+.meetings-list{
+    list-style-type: none;
+    display: inline;
+}
+.meeting-row{
+    display: flex;
+    padding: 15px 10px 15px 10px;
+    box-shadow: 0 8px 8px -8px rgba(0, 0, 0, 0.3), inset 0 -8px 8px -8px rgba(0, 0, 0, 0.3);
+    background-color: #FFFAFA;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    .title{
+        display: flex;
+        align-items: center;
+        max-width: 20%;
+        padding-right: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .participants{
+        display: flex;
+        margin-right: auto;
+        .participant{
+            margin: 10px;
+            width: fit-content;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+    }
+
+    .meeting-time{
+        color: green;
+        padding: 20px;
+    }
 }
