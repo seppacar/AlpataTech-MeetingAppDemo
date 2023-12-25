@@ -20,9 +20,9 @@ namespace AlpataTech.MeetingAppDemo.Services.AuthService
         {
             _configuration = configuration;
             _userService = userService;
-            JwtIssuer = _configuration["Authentication:JWT:Issuer"];
-            JwtAudience = _configuration["Authentication:JWT:Audience"];
-            JwtSecret = _configuration["Authentication:JWT:Secret"];
+            JwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? _configuration["Authentication:JWT:Issuer"];
+            JwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? _configuration["Authentication:JWT:Audience"];
+            JwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? _configuration["Authentication:JWT:Secret"];
         }
         public async Task<string> GenerateJWT(UserAuthDto userAuthDto)
         {
