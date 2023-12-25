@@ -28,7 +28,8 @@ RUN dotnet build "./AlpataTech.MeetingAppDemo.API" -c $BUILD_CONFIGURATION -o /a
 # Install the dotnet ef tool
 RUN dotnet tool install --global dotnet-ef --version 7.0.0
 ENV PATH="$PATH:/root/.dotnet/tools"
-
+# Generate Code First migrations
+RUN dotnet ef migrations add InitialMigration --startup-project "./AlpataTech.MeetingAppDemo.API" --project "./AlpataTech.MeetingAppDemo.DAL" --verbose
 # Generate self-contained EF Core migrations bundle
 RUN dotnet ef migrations bundle --self-contained -r linux-x64 -o migrations_bundle --startup-project "./AlpataTech.MeetingAppDemo.API" --project "./AlpataTech.MeetingAppDemo.DAL" --verbose
 
