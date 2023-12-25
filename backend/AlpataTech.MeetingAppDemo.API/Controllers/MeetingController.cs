@@ -150,7 +150,12 @@ namespace AlpataTech.MeetingAppDemo.API.Controllers
             // Only allow if request maker user is organizer or is "Admin"
             if (await _meetingService.IsUserOrganizer(meetingId, userId) || User.IsInRole("Admin"))
             {
-                string[] permittedExtensions = { ".pdf", ".docx", ".pptx", "webp" };
+                string[] permittedExtensions = {
+                    ".pdf", ".docx", ".pptx", ".webp",     // Document types
+                    ".txt", ".xls", ".xlsx", ".csv",        // Additional document types
+                    ".mp4", ".mp3",                         // Multimedia files
+                    ".jpg", ".jpeg", ".png", ".gif", ".bmp" // Image files
+                };
 
                 var fileExtension = Path.GetExtension(meetingDocumentFile.FileName).ToLower();
                 var meetingDocumentFileModel = new FileUploadModel
